@@ -1,0 +1,1780 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Atlas Arcadia - Indonesia's First Luxury Wellness Co-Living</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Plus Jakarta Sans & Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Plus Jakarta Sans', 'sans-serif'],
+                    },
+                    colors: {
+                        apple: {
+                            black: '#1d1d1f',
+                            gray: '#f5f5f7',
+                            darkGray: '#86868b',
+                            blue: '#0066cc',
+                            border: '#d2d2d7',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* ==========================================================================
+           BASE STYLES & INTERACTIVE GLOW EFFECTS
+           ========================================================================== */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #050505;
+            color: #f5f5f7;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        body.light-mode {
+            background-color: #f5f5f7 !important;
+            color: #1d1d1f !important;
+        }
+
+        /* Ambient Glow & Shadow Effects */
+        .neon-glow-emerald {
+            box-shadow: 0 0 40px -5px rgba(16, 185, 129, 0.15);
+        }
+        .neon-glow-blue {
+            box-shadow: 0 0 40px -5px rgba(59, 130, 246, 0.15);
+        }
+
+        /* Glassmorphism Navigation */
+        .glass-nav {
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            background-color: rgba(5, 5, 5, 0.75);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        body.light-mode .glass-nav {
+            background-color: rgba(255, 255, 255, 0.75);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        /* Shimmer button animation */
+        @keyframes shimmer {
+            0% { background-position: -200% center; }
+            100% { background-position: 200% center; }
+        }
+        .btn-shimmer {
+            position: relative;
+            overflow: hidden;
+        }
+        .btn-shimmer::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(90deg, transparent 30%, rgba(255,255,255,0.2) 50%, transparent 70%);
+            background-size: 200% 100%;
+            animation: shimmer 3s infinite;
+            pointer-events: none;
+        }
+
+        /* Interactive Transitions */
+        .apple-transition {
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        /* Scroll Progress Bar */
+        #scroll-progress {
+            position: fixed;
+            top: 0; left: 0;
+            width: 0%; height: 3px;
+            background: linear-gradient(90deg, #10b981, #3b82f6);
+            z-index: 100;
+            transition: width 0.1s linear;
+        }
+
+        /* Card Magnetic Effect container */
+        .tilt-card {
+            transform-style: preserve-3d;
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        /* Grid Spotlight effect background */
+        .grid-bg {
+            background-image: 
+                linear-gradient(rgba(255, 255, 255, 0.012) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.012) 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+        body.light-mode .grid-bg {
+            background-image: 
+                linear-gradient(rgba(0, 0, 0, 0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 0, 0, 0.02) 1px, transparent 1px);
+        }
+
+        /* Hidden Scrollbar */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        /* SVG architectural elements styling */
+        .site-unit {
+            cursor: pointer;
+            transition: fill 0.3s ease, filter 0.3s ease, stroke-width 0.3s ease, opacity 0.3s ease;
+        }
+        .site-unit:hover {
+            filter: brightness(1.2) drop-shadow(0 0 6px rgba(16, 185, 129, 0.5));
+            stroke-width: 2px;
+        }
+
+        /* ROTARY DIAL GESTURE CONTROLLER */
+        .rotary-ring {
+            transform-origin: center;
+            transition: transform 0.1s ease;
+            cursor: pointer;
+        }
+
+        /* ANIMATED LIVE DOT INDICATOR */
+        @keyframes livePulse {
+            0% { transform: scale(0.9); opacity: 1; }
+            50% { transform: scale(1.4); opacity: 0.3; }
+            100% { transform: scale(0.9); opacity: 1; }
+        }
+        .live-dot {
+            animation: livePulse 2s infinite ease-in-out;
+        }
+
+        /* Smooth tab contents */
+        .tab-content-fade {
+            transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        /* Micro-interactions: glowing borders */
+        .premium-border-glow {
+            position: relative;
+        }
+        .premium-border-glow::after {
+            content: '';
+            position: absolute;
+            inset: -1px;
+            background: linear-gradient(135deg, transparent, rgba(16,185,129,0.3), transparent);
+            border-radius: inherit;
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+        .premium-border-glow:hover::after {
+            opacity: 1;
+        }
+
+        /* Light mode global scheme override */
+        body.light-mode .text-apple-darkGray { color: #4b5563 !important; }
+        body.light-mode .bg-zinc-900 { background-color: #ffffff !important; border-color: rgba(0, 0, 0, 0.08) !important; }
+        body.light-mode .bg-zinc-950 { background-color: #f5f5f7 !important; }
+        body.light-mode .bg-black { background-color: #fafafa !important; }
+        body.light-mode .border-zinc-800 { border-color: rgba(0, 0, 0, 0.08) !important; }
+        body.light-mode h1, body.light-mode h2, body.light-mode h3, body.light-mode h4, body.light-mode h5, body.light-mode h6 { color: #1d1d1f !important; }
+        body.light-mode p, body.light-mode span:not(.no-light-override) { color: #334155 !important; }
+    </style>
+</head>
+<body class="selection:bg-emerald-500 selection:text-black antialiased">
+
+<!-- SCROLL PROGRESS BAR -->
+<div id="scroll-progress"></div>
+
+<!-- INTUITIVE FLOATING WATERMARK / INTEL CONNECTIVITY -->
+<div class="fixed bottom-6 left-6 z-40 hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full bg-black/80 border border-zinc-800 backdrop-blur-md text-[10px] font-mono tracking-widest text-emerald-400">
+    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 live-dot"></span>
+    ATLAS SYSTEM ONLINE: V2.6.2
+</div>
+
+<!-- TOP GLASS NAVIGATION BAR -->
+<nav class="fixed top-0 left-0 w-full z-50 glass-nav apple-transition py-4" id="main-nav">
+    <div class="max-w-7xl mx-auto px-6 flex justify-between items-center">
+        <a href="#" class="flex items-center space-x-2.5">
+            <span class="font-display font-black text-2xl tracking-tight text-white hover:text-emerald-400 apple-transition">ATLAS</span>
+            <span class="text-[9px] font-bold uppercase tracking-widest bg-emerald-500 text-black px-2.5 py-0.5 rounded-full font-display font-black whitespace-nowrap">ARCADIA</span>
+        </a>
+        
+        <div class="hidden lg:flex items-center space-x-4 xl:space-x-8 text-[10px] xl:text-[11px] uppercase tracking-wider font-semibold text-apple-darkGray">
+            <a href="#potensi" class="hover:text-white apple-transition">Analisis Pasar</a>
+            <a href="#pilar" class="hover:text-white apple-transition">5 Pilar Utama</a>
+            <a href="#smart-suite" class="hover:text-emerald-400 apple-transition font-bold">IoT Simulator</a>
+            <a href="#floor-plan" class="hover:text-white apple-transition">Masterplan</a>
+            <a href="#kalkulator" class="hover:text-emerald-400 font-bold apple-transition">Kalkulator ROI</a>
+            <a href="#concierge" class="hover:text-white apple-transition font-bold">AI Concierge</a>
+        </div>
+
+        <div class="flex items-center space-x-4">
+            <!-- Advanced Dark/Light Mode Theme Toggle Switch -->
+            <button onclick="toggleTheme()" class="relative flex items-center w-12 h-6 rounded-full bg-zinc-800 border border-zinc-700 focus:outline-none transition-all duration-300 p-0.5 shadow-inner" id="theme-toggle-btn" title="Ganti Tema">
+                <span class="w-4.5 h-4.5 rounded-full bg-white flex items-center justify-center transition-all duration-300 transform translate-x-0 shadow" id="theme-toggle-knob">
+                    <span id="theme-icon" class="text-[10px] leading-none select-none">🌙</span>
+                </span>
+            </button>
+
+            <button onclick="openBookingModal()" class="btn-shimmer bg-emerald-500 text-black px-5 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider hover:bg-emerald-400 apple-transition shadow-lg whitespace-nowrap">
+                Konsultasi Privat
+            </button>
+        </div>
+    </div>
+</nav>
+
+<!-- HIGH-PERFORMANCE GLOBAL BACKGROUND PARTICLE SPACE -->
+<div class="absolute inset-0 z-0 pointer-events-none overflow-hidden">
+    <canvas id="particleCanvas" class="w-full h-full opacity-40"></canvas>
+</div>
+
+<!-- CINEMATIC HERO SECTION -->
+<section id="hero" class="relative min-h-screen flex items-center justify-center pt-28 pb-20 overflow-hidden bg-black grid-bg z-10">
+    <div class="absolute inset-0 z-0 bg-cover bg-center opacity-25 filter brightness-[0.35]" 
+         style="background-image: url('https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=2000&q=80');"></div>
+    <div class="absolute inset-0 bg-gradient-to-b from-black/80 via-transparent to-black z-0"></div>
+
+    <div class="relative z-20 max-w-7xl mx-auto px-6 w-full grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+        <!-- Hero Text (Left Pane) -->
+        <div class="lg:col-span-7 text-left space-y-6">
+            <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-zinc-900/80 border border-zinc-800 text-xs font-semibold tracking-wider text-emerald-400 uppercase font-display shadow-md">
+                <span class="w-2 h-2 rounded-full bg-emerald-500 live-dot"></span>
+                Capital Preservation Through Luxury Real Estate
+            </div>
+            
+            <h1 class="font-display font-extrabold text-3xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl tracking-tight leading-tight md:leading-none text-white">
+                Autonomous Living.<br>
+                <span class="bg-gradient-to-r from-emerald-400 via-teal-300 to-blue-400 bg-clip-text text-transparent">Passive Income Aman.</span>
+            </h1>
+            
+            <p class="text-sm md:text-lg text-apple-darkGray max-w-2xl leading-relaxed font-light">
+                Miliki unit properti mewah pertama di Indonesia yang menggabungkan standar <strong class="text-white font-medium">Luxury Wellness Co-Living</strong> dengan integrasi IoT otonom terlengkap di kawasan strategis Purwokerto. Dikelola 100% autopilot oleh Atlas Estate Management.
+            </p>
+
+            <div class="flex flex-col sm:flex-row gap-4 pt-4">
+                <button onclick="openBookingModal()" class="btn-shimmer px-8 py-4 bg-emerald-500 text-black font-extrabold rounded-full text-base hover:bg-emerald-400 apple-transition shadow-xl hover:-translate-y-1 whitespace-nowrap">
+                    Book Presentasi Privat 1-on-1
+                </button>
+                <a href="#kalkulator" class="px-8 py-4 bg-zinc-900 text-white font-medium rounded-full text-base border border-zinc-800 hover:bg-zinc-800 hover:border-zinc-700 text-center apple-transition shadow-sm hover:-translate-y-1 whitespace-nowrap">
+                    Simulasi Finansial 10 Tahun →
+                </a>
+            </div>
+        </div>
+
+        <!-- Dynamic Control Dashboard Preview (Right Pane) -->
+        <div class="lg:col-span-5 bg-zinc-900/60 border border-zinc-800/80 rounded-3xl p-6 md:p-8 backdrop-blur-md neon-glow-emerald space-y-6">
+            <div class="flex justify-between items-center border-b border-zinc-800 pb-4">
+                <div>
+                    <span class="text-[10px] text-apple-darkGray uppercase tracking-wider block">Real-time Metrics</span>
+                    <h3 class="font-display font-bold text-lg text-white">Arcadia Master Panel</h3>
+                </div>
+                <span class="text-[10px] font-mono font-bold text-emerald-400 bg-emerald-500/10 px-2.5 py-1 rounded border border-emerald-500/20 uppercase tracking-widest flex items-center gap-1.5">
+                    <span class="w-1.5 h-1.5 bg-emerald-500 rounded-full live-dot"></span> Online
+                </span>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+                <div class="bg-zinc-950 p-4 rounded-2xl border border-zinc-800">
+                    <span class="text-[10px] text-apple-darkGray block uppercase tracking-wider mb-1">Target Okupansi</span>
+                    <span class="font-display font-black text-xl sm:text-2xl md:text-3xl text-emerald-400 whitespace-nowrap">90% - 100%</span>
+                </div>
+                <div class="bg-zinc-950 p-4 rounded-2xl border border-zinc-800">
+                    <span class="text-[10px] text-apple-darkGray block uppercase tracking-wider mb-1">Total Unit Terjual</span>
+                    <span class="font-display font-black text-xl sm:text-2xl md:text-3xl text-white whitespace-nowrap">84%</span>
+                </div>
+                <div class="bg-zinc-950 p-4 rounded-2xl border border-zinc-800">
+                    <span class="text-[10px] text-apple-darkGray block uppercase tracking-wider mb-1">Wealth Yr 10</span>
+                    <span class="font-display font-black text-lg sm:text-xl md:text-2xl text-white whitespace-nowrap">Rp 2.79 M</span>
+                </div>
+                <div class="bg-zinc-950 p-4 rounded-2xl border border-zinc-800">
+                    <span class="text-[10px] text-apple-darkGray block uppercase tracking-wider mb-1">Management Cost</span>
+                    <span class="font-display font-black text-lg sm:text-xl md:text-2xl text-amber-500 whitespace-nowrap font-bold">Fixed 30%</span>
+                </div>
+            </div>
+
+            <!-- Animated Property Health Bar -->
+            <div class="space-y-2">
+                <div class="flex justify-between text-xs font-semibold">
+                    <span class="text-apple-darkGray">Evaluasi Kelayakan Pasar Purwokerto</span>
+                    <span class="text-white">96% Sangat Sehat</span>
+                </div>
+                <div class="w-full bg-zinc-950 h-2 rounded-full overflow-hidden border border-zinc-800">
+                    <div class="bg-gradient-to-r from-emerald-500 to-teal-400 h-full rounded-full" style="width: 96%"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- SECTION 1: MACRO ANALYSIS & POTENSI PASAR (BENTO GRID 2.0) -->
+<section id="potensi" class="py-32 bg-zinc-950 border-t border-zinc-900 relative">
+    <div class="max-w-7xl mx-auto px-6">
+        <div class="text-center max-w-3xl mx-auto mb-20">
+            <span class="text-xs font-bold uppercase tracking-widest text-emerald-400 font-display mb-3 block">Analisis Makro Purwokerto</span>
+            <h2 class="font-display font-extrabold text-2xl sm:text-3xl md:text-4xl lg:text-5xl tracking-tight text-white leading-normal">
+                Pusat Pendidikan & Medis Terbesar Jawa Tengah Selatan
+            </h2>
+            <p class="text-base text-apple-darkGray mt-4 font-light">
+                Purwokerto mengalami peningkatan drastis akan kebutuhan hunian premium sehat dan mandiri dari kalangan mahasiswa kedokteran, dokter spesialis, serta profesional kesehatan.
+            </p>
+        </div>
+
+        <!-- Advanced Bento Layout Matrix -->
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-stretch">
+            
+            <!-- Left Large Card: UNSOED Metrics -->
+            <div class="md:col-span-8 bg-zinc-900 border border-zinc-800 rounded-3xl p-8 flex flex-col justify-between tilt-card premium-border-glow min-h-[350px]">
+                <div>
+                    <span class="text-[10px] font-bold text-emerald-400 uppercase tracking-widest block mb-2">Episentrum Edukasi</span>
+                    <h3 class="font-display font-extrabold text-xl sm:text-2xl lg:text-3xl text-white mb-4 leading-snug">± 28.000 Mahasiswa Universitas Jenderal Soedirman</h3>
+                    <p class="text-sm text-apple-darkGray max-w-xl font-light leading-relaxed">
+                        Fakultas Kedokteran dan Rumah Sakit Gigi Mulut UNSOED memicu arus masuk ratusan mahasiswa baru dari keluarga kelas atas setiap tahunnya. Mereka menuntut kenyamanan, keamanan tinggi, serta ekosistem produktif yang mandiri.
+                    </p>
+                </div>
+                <div class="grid grid-cols-2 sm:grid-cols-3 gap-6 pt-8 border-t border-zinc-800/60 mt-6">
+                    <div>
+                        <span class="text-xs text-apple-darkGray block mb-1">Daya Beli Sewa Tinggi</span>
+                        <strong class="text-lg sm:text-xl text-white whitespace-nowrap">Rp 2 - 3.5 Jt/bln</strong>
+                    </div>
+                    <div>
+                        <span class="text-xs text-apple-darkGray block mb-1">Pertumbuhan Tahunan</span>
+                        <strong class="text-lg sm:text-xl text-emerald-400 whitespace-nowrap">+8.5% p.a.</strong>
+                    </div>
+                    <div>
+                        <span class="text-xs text-apple-darkGray block mb-1">Pilihan Unit Premium</span>
+                        <strong class="text-lg sm:text-xl text-rose-500 whitespace-nowrap">&lt; 5% Tersedia</strong>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Small Card: Hospital Rujukan -->
+            <div class="md:col-span-4 bg-zinc-900 border border-zinc-800 rounded-3xl p-8 flex flex-col justify-between tilt-card premium-border-glow min-h-[350px]">
+                <div>
+                    <span class="text-[10px] font-bold text-blue-400 uppercase tracking-widest block mb-2">Sektor Kesehatan</span>
+                    <h3 class="font-display font-extrabold text-lg sm:text-xl lg:text-2xl text-white mb-3 leading-snug">6+ Rumah Sakit Rujukan Utama</h3>
+                    <p class="text-xs text-apple-darkGray font-light leading-relaxed">
+                        RSUD Margono Soekarjo, RS Orthopaedi, RS JIH, dan Hermina beroperasi sebagai pusat rujukan regional, membawa ribuan tenaga dokter residen, spesialis, dan profesional yang membutuhkan ketenangan tinggal pasca-dinas.
+                    </p>
+                </div>
+                <div class="pt-4 border-t border-zinc-800/60">
+                    <span class="text-[10px] uppercase font-semibold text-blue-400 block mb-1">Zona Radius Emas</span>
+                    <p class="text-[11px] text-apple-darkGray font-mono whitespace-nowrap">Hanya 5 - 8 Menit dari Lokasi Atlas Arcadia</p>
+                </div>
+            </div>
+
+            <!-- Row 2: Bento Marketplace Gaps -->
+            <div class="md:col-span-4 bg-zinc-900 border border-zinc-800 rounded-3xl p-8 flex flex-col justify-between tilt-card premium-border-glow">
+                <div>
+                    <span class="text-[10px] font-bold text-amber-500 uppercase tracking-widest block mb-2">Masalah Kos Konvensional</span>
+                    <h3 class="font-display font-bold text-xl text-white mb-2 leading-tight">Manajemen Tradisional</h3>
+                    <p class="text-xs text-apple-darkGray leading-relaxed font-light">
+                        Pengelolaan manual rentan kebocoran biaya operasional, minim proteksi keamanan digital, serta mengabaikan faktor wellness sirkulasi udara sehat.
+                    </p>
+                </div>
+                <div class="pt-6 border-t border-zinc-800/60 text-xs font-mono text-amber-500 flex items-center gap-1.5 whitespace-nowrap">
+                    <span class="w-2 h-2 rounded-full bg-amber-500 live-dot"></span> Inefisiensi Energi Hingga 40%
+                </div>
+            </div>
+
+            <div class="md:col-span-8 bg-zinc-900 border border-zinc-800 rounded-3xl p-8 flex flex-col justify-between tilt-card premium-border-glow">
+                <div>
+                    <span class="text-[10px] font-bold text-emerald-400 uppercase tracking-widest block mb-2">Solusi Atlas Arcadia</span>
+                    <h3 class="font-display font-extrabold text-xl sm:text-2xl text-white mb-3 leading-tight">Autonomous Luxury Co-Living Standar Tinggi</h3>
+                    <p class="text-sm text-apple-darkGray leading-relaxed font-light">
+                        Kami menyatukan tata kelola otonom IoT, pemurnian udara standar medis, ruang komunal eksklusif, serta kenyamanan premium bergaransi guna mematok tarif sewa optimal di atas rata-rata pasar lokal.
+                    </p>
+                </div>
+                <div class="flex flex-wrap items-center gap-4 pt-6 border-t border-zinc-800/60">
+                    <span class="px-3 py-1 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-xs font-semibold whitespace-nowrap">100% Autopilot</span>
+                    <span class="px-3 py-1 rounded bg-blue-500/10 text-blue-400 border border-blue-500/20 text-xs font-semibold whitespace-nowrap">IoT Integrasi Penuh</span>
+                    <span class="px-3 py-1 rounded bg-purple-500/10 text-purple-400 border border-purple-500/20 text-xs font-semibold whitespace-nowrap">Medical Air Filtration</span>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<!-- SECTION 2: THE 5 PILLARS -->
+<section id="pilar" class="py-32 bg-black border-t border-zinc-900">
+    <div class="max-w-7xl mx-auto px-6">
+        <div class="text-center max-w-3xl mx-auto mb-20">
+            <span class="text-xs font-bold uppercase tracking-widest text-emerald-400 font-display mb-3 block">Prinsip Rekayasa Properti</span>
+            <h2 class="font-display font-extrabold text-2xl sm:text-3xl md:text-4xl lg:text-5xl tracking-tight text-white leading-normal">
+                5 Pilar Kokoh Investasi Arcadia
+            </h2>
+            <p class="text-base text-apple-darkGray mt-4 font-light">
+                Merangkai perpaduan harmoni rekayasa arsitektur modern, kesehatan preventif, kenyamanan nirkabel, dan proteksi kekayaan jangka panjang.
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            
+            <!-- Pillar 1: Healthy Living -->
+            <div class="bg-zinc-900 border border-zinc-800 rounded-3xl p-8 flex flex-col justify-between tilt-card premium-border-glow min-h-[300px] group">
+                <div>
+                    <div class="w-12 h-12 rounded-2xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center mb-6 group-hover:scale-110 group-hover:rotate-6 apple-transition">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
+                    </div>
+                    <h3 class="font-display font-bold text-xl text-white mb-2 leading-tight">01. Healthy Living</h3>
+                    <p class="text-xs text-apple-darkGray leading-relaxed font-light">
+                        Tata sirkulasi udara beraliran silang optimal, filtrasi udara HEPA penangkap debu-alergen, intensitas cahaya alami maksimal untuk kebugaran sirkadian, serta material bebas timbal.
+                    </p>
+                </div>
+                <span class="text-[10px] uppercase font-bold text-emerald-400 mt-6 tracking-widest block whitespace-nowrap">Standard Medis & Wellness</span>
+            </div>
+
+            <!-- Pillar 2: Smart Living -->
+            <div class="bg-zinc-900 border border-zinc-800 rounded-3xl p-8 flex flex-col justify-between tilt-card premium-border-glow min-h-[300px] group">
+                <div>
+                    <div class="w-12 h-12 rounded-2xl bg-blue-500/10 text-blue-400 flex items-center justify-center mb-6 group-hover:scale-110 group-hover:-rotate-6 apple-transition">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                    </div>
+                    <h3 class="font-display font-bold text-xl text-white mb-2 leading-tight">02. Smart Living</h3>
+                    <p class="text-xs text-apple-darkGray leading-relaxed font-light">
+                        Kontrol nirkabel terenkripsi smart lockdoor, penjadwalan efisiensi energi kelistrikan, serta dashboard mandiri pemantau konsumsi energi real-time berbasis IoT.
+                    </p>
+                </div>
+                <span class="text-[10px] uppercase font-bold text-blue-400 mt-6 tracking-widest block whitespace-nowrap">Otomasi Nirsentuh Terpadu</span>
+            </div>
+
+            <!-- Pillar 3: Community Living -->
+            <div class="bg-zinc-900 border border-zinc-800 rounded-3xl p-8 flex flex-col justify-between tilt-card premium-border-glow min-h-[300px] group">
+                <div>
+                    <div class="w-12 h-12 rounded-2xl bg-purple-500/10 text-purple-400 flex items-center justify-center mb-6 group-hover:scale-110 group-hover:rotate-6 apple-transition">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                    </div>
+                    <h3 class="font-display font-bold text-xl text-white mb-2 leading-tight">03. Community Living</h3>
+                    <p class="text-xs text-apple-darkGray leading-relaxed font-light">
+                        Fasilitas sosial berkelas untuk mempertemukan ide kreatif, diskusi akademis medis, sarana hiburan eksklusif, serta membina iklim interaksi yang positif di antara para penghuni.
+                    </p>
+                </div>
+                <span class="text-[10px] uppercase font-bold text-purple-400 mt-6 tracking-widest block whitespace-nowrap">Social Hub Eksklusif 2 Lantai</span>
+            </div>
+
+            <!-- Pillar 4: High Performance Living -->
+            <div class="bg-zinc-900 border border-zinc-800 rounded-3xl p-8 flex flex-col justify-between tilt-card premium-border-glow min-h-[300px] group md:col-span-2">
+                <div>
+                    <div class="w-12 h-12 rounded-2xl bg-amber-500/10 text-amber-400 flex items-center justify-center mb-6 group-hover:scale-110 group-hover:-rotate-6 apple-transition">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                    </div>
+                    <h3 class="font-display font-bold text-xl text-white mb-2 leading-tight">04. High Performance Living</h3>
+                    <p class="text-xs text-apple-darkGray leading-relaxed font-light">
+                        Mendukung kelancaran riset medis dan penyusunan tugas akhir melalui ketersediaan jaringan fiber optic berkecepatan tinggi konstan, kabin belajar mandiri kedap suara (silent study booth), serta asupan sirkulasi udara kaya oksigen murni.
+                    </p>
+                </div>
+                <span class="text-[10px] uppercase font-bold text-amber-400 mt-6 tracking-widest block whitespace-nowrap">Infrastruktur Produktivitas Tanpa Hambatan</span>
+            </div>
+
+            <!-- Pillar 5: Managed Investment Ecosystem -->
+            <div class="bg-zinc-900 border border-zinc-800 rounded-3xl p-8 flex flex-col justify-between tilt-card premium-border-glow min-h-[300px] group md:col-span-1">
+                <div>
+                    <div class="w-12 h-12 rounded-2xl bg-rose-500/10 text-rose-400 flex items-center justify-center mb-6 group-hover:scale-110 group-hover:rotate-6 apple-transition">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    </div>
+                    <h3 class="font-display font-bold text-xl text-white mb-2 leading-tight">05. Managed Asset</h3>
+                    <p class="text-xs text-apple-darkGray leading-relaxed font-light">
+                        Manajemen properti lepas tangan 100% komprehensif. Kami mengelola akuisisi penyewa, perawatan gedung harian, penyelesaian urusan legalitas, hingga distribusi dividen berkala.
+                    </p>
+                </div>
+                <span class="text-[10px] uppercase font-bold text-rose-400 mt-6 tracking-widest block whitespace-nowrap">Sistem Pasif Aman Terproteksi</span>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<!-- SECTION 3: SMART SUITE IOT SIMULATOR 2.0 (ADVANCED DIAL CONTROLLER) -->
+<section id="smart-suite" class="py-32 bg-zinc-950 border-t border-zinc-900 relative overflow-hidden">
+    <div class="absolute inset-0 opacity-10 pointer-events-none" style="background-image: radial-gradient(circle at 80% 20%, #10b981 0%, transparent 60%);"></div>
+    
+    <div class="max-w-7xl mx-auto px-6 relative z-10">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
+            
+            <!-- Information Panel (Left column) -->
+            <div class="lg:col-span-5 space-y-6">
+                <span class="text-xs font-bold uppercase tracking-widest text-emerald-400 font-display block">Sistem Manajemen Pintar</span>
+                <h2 class="font-display font-extrabold text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-white tracking-tight leading-normal">
+                    Kamar Pintar yang Beroperasi Otonom
+                </h2>
+                <p class="text-base text-apple-darkGray font-light leading-relaxed">
+                    Setiap kamar Atlas Arcadia dilengkapi rangkaian sensor pengontrol kondisi fisik lingkungan. Anda dapat menguji fungsionalitas otomasi kamar Suite #104 melalui simulator interaktif di samping.
+                </p>
+
+                <!-- Interactive IoT Diagnostic Feed -->
+                <div class="bg-black/90 rounded-2xl p-5 border border-zinc-800/80 font-mono text-[11px] text-emerald-400 shadow-inner space-y-3">
+                    <div class="flex justify-between items-center text-zinc-500 font-sans font-bold uppercase tracking-wider text-[10px] whitespace-nowrap">
+                        <span class="flex items-center gap-2">
+                            <span class="w-2 h-2 rounded-full bg-emerald-500 live-dot"></span> Diagnostics Terminal
+                        </span>
+                        <span>v2.4-live</span>
+                    </div>
+                    <div id="iot-terminal" class="space-y-1.5 h-32 overflow-hidden flex flex-col justify-end no-scrollbar">
+                        <!-- Filled by JS -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Smart Simulator Interface Widget (Right column) -->
+            <div class="lg:col-span-7 bg-zinc-900 border border-zinc-800 rounded-3xl p-6 md:p-8 flex flex-col sm:flex-row gap-8 neon-glow-emerald relative">
+                <div id="room-glow" class="absolute inset-0 bg-emerald-500/5 rounded-3xl apple-transition z-0"></div>
+
+                <!-- Control Console Column -->
+                <div class="flex-1 space-y-5 relative z-10">
+                    <div class="flex justify-between items-center border-b border-zinc-800 pb-3">
+                        <span class="text-xs text-apple-darkGray font-semibold uppercase">Device Console</span>
+                        <span class="text-[10px] font-mono text-emerald-400 bg-emerald-500/10 px-2.5 py-0.5 rounded border border-emerald-500/20 uppercase tracking-wider whitespace-nowrap">Suite #104</span>
+                    </div>
+
+                    <!-- Smart Lock Toggle -->
+                    <div onclick="toggleSmartLock()" class="flex justify-between items-center bg-zinc-950/80 border border-zinc-800 hover:border-zinc-700 p-4 rounded-2xl cursor-pointer apple-transition group">
+                        <div class="flex items-center gap-3">
+                            <div id="lock-icon" class="w-10 h-10 rounded-xl bg-zinc-900 text-emerald-400 flex items-center justify-center">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 00-2 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+                            </div>
+                            <div class="text-xs">
+                                <span class="font-bold text-white block">Smart Security Lock</span>
+                                <span id="lock-status" class="text-emerald-400 whitespace-nowrap">Locked Terenkripsi</span>
+                            </div>
+                        </div>
+                        <button id="lock-toggle" class="w-11 h-6 rounded-full bg-emerald-500 p-0.5 flex items-center justify-end apple-transition">
+                            <span class="w-5 h-5 rounded-full bg-white shadow"></span>
+                        </button>
+                    </div>
+
+                    <!-- Air Filtration Toggle -->
+                    <div onclick="toggleHEPAFilter()" class="flex justify-between items-center bg-zinc-950/80 border border-zinc-800 hover:border-zinc-700 p-4 rounded-2xl cursor-pointer apple-transition group">
+                        <div class="flex items-center gap-3">
+                            <div id="filter-icon" class="w-10 h-10 rounded-xl bg-zinc-900 text-emerald-400 flex items-center justify-center">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z"></path></svg>
+                            </div>
+                            <div class="text-xs">
+                                <span class="font-bold text-white block">HEPA Air Purifier</span>
+                                <span id="filter-status" class="text-emerald-400 whitespace-nowrap">Penyaringan Aktif (99%)</span>
+                            </div>
+                        </div>
+                        <button id="filter-toggle" class="w-11 h-6 rounded-full bg-emerald-500 p-0.5 flex items-center justify-end apple-transition">
+                            <span class="w-5 h-5 rounded-full bg-white shadow"></span>
+                        </button>
+                    </div>
+
+                    <!-- Lighting Mode Selector -->
+                    <div class="bg-zinc-950/80 border border-zinc-800 p-4 rounded-2xl space-y-3">
+                        <div class="flex justify-between text-xs font-semibold">
+                            <span class="text-apple-darkGray">Preset Suasana</span>
+                            <span id="ambient-mode-lbl" class="text-emerald-400 uppercase tracking-widest text-[10px] whitespace-nowrap">Study Mode</span>
+                        </div>
+                        <div class="grid grid-cols-3 gap-2">
+                            <button onclick="setAmbientMode('study')" id="btn-mode-study" class="py-2 rounded-xl bg-zinc-900 text-[10px] font-bold text-emerald-400 border border-emerald-500/30 whitespace-nowrap">BELAJAR</button>
+                            <button onclick="setAmbientMode('chill')" id="btn-mode-chill" class="py-2 rounded-xl bg-zinc-900 text-[10px] font-bold text-zinc-400 border border-transparent whitespace-nowrap">SANTAI</button>
+                            <button onclick="setAmbientMode('sleep')" id="btn-mode-sleep" class="py-2 rounded-xl bg-zinc-900 text-[10px] font-bold text-zinc-400 border border-transparent whitespace-nowrap">TIDUR</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Rotary Temperature Interface Widget -->
+                <div class="flex-1 bg-zinc-950 border border-zinc-800 rounded-2xl p-6 flex flex-col justify-between items-center relative z-10 text-center">
+                    <div class="w-full text-left">
+                        <span class="text-[9px] text-apple-darkGray uppercase tracking-wider block">Rotary AC Dial</span>
+                        <span class="text-xs font-bold text-white leading-tight block">Kontrol Suhu Halus</span>
+                    </div>
+
+                    <!-- Interactive AC Temperature Dial -->
+                    <div class="relative w-44 h-44 my-4 flex items-center justify-center">
+                        <svg width="170" height="170" viewBox="0 0 170 170" class="absolute inset-0">
+                            <!-- Background Track -->
+                            <circle cx="85" cy="85" r="70" fill="none" stroke="#22252a" stroke-width="8" stroke-dasharray="350 440" stroke-linecap="round" transform="rotate(130 85 85)"/>
+                            <!-- Indicator Fill -->
+                            <circle id="dial-ring-indicator" cx="85" cy="85" r="70" fill="none" stroke="#10b981" stroke-width="8" stroke-dasharray="140 440" stroke-linecap="round" class="apple-transition" transform="rotate(130 85 85)"/>
+                            <!-- Active Dial Ring Knob -->
+                            <g class="rotary-ring" id="ac-rotary-wheel">
+                                <circle cx="85" cy="85" r="62" fill="none" stroke="transparent" stroke-width="20"/>
+                                <circle cx="85" cy="15" r="5" fill="#ffffff" class="shadow-md cursor-pointer"/>
+                            </g>
+                        </svg>
+
+                        <!-- Central Numerical Display -->
+                        <div class="absolute flex flex-col items-center">
+                            <span class="text-[9px] text-apple-darkGray uppercase tracking-widest mb-0.5 whitespace-nowrap">Suhu Kamar</span>
+                            <span id="ac-temp-val" class="font-display font-black text-4xl text-white tracking-tight leading-none whitespace-nowrap">24°C</span>
+                            <span id="ac-status-desc" class="text-[8px] text-emerald-400 font-bold uppercase tracking-wider mt-1 whitespace-nowrap">Sangat Nyaman</span>
+                        </div>
+                    </div>
+
+                    <!-- Real-time Power Consumed -->
+                    <div class="w-full grid grid-cols-2 gap-4 pt-4 border-t border-zinc-900 text-left">
+                        <div>
+                            <span class="text-[9px] text-apple-darkGray uppercase tracking-wider block mb-0.5">Daya Kelistrikan</span>
+                            <span id="power-indicator" class="font-display font-bold text-xs text-white whitespace-nowrap">2.8 kWh / hari</span>
+                        </div>
+                        <div>
+                            <span class="text-[9px] text-apple-darkGray uppercase tracking-wider block mb-0.5 font-bold">Filter Air</span>
+                            <span class="font-display font-bold text-xs text-white whitespace-nowrap">94% Bersih</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- SECTION 4: MASTERPLAN & SECTORAL BLUEPRINT STUDIO (FLOOR SELECTOR) -->
+<section id="floor-plan" class="py-32 bg-black border-t border-zinc-900 relative">
+    <div class="max-w-7xl mx-auto px-6">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
+            
+            <!-- Interactive SVG Blueprint Layout (Left Column) -->
+            <div class="lg:col-span-7 bg-zinc-900/40 border border-zinc-800/80 p-6 md:p-8 rounded-3xl relative overflow-hidden flex flex-col min-h-[520px]">
+                
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6 border-b border-zinc-800 pb-4 relative z-10">
+                    <div>
+                        <span class="text-[10px] text-apple-darkGray uppercase tracking-wider block">Denah Arsitektural</span>
+                        <h3 class="font-display font-bold text-xl text-white leading-tight">Arcadia Master Blueprint</h3>
+                    </div>
+
+                    <!-- Availability Color Keys -->
+                    <div class="flex gap-3 text-[9px] font-bold font-mono whitespace-nowrap">
+                        <span class="flex items-center gap-1 text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded">
+                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Tersedia
+                        </span>
+                        <span class="flex items-center gap-1 text-amber-500 bg-amber-500/10 border border-amber-500/20 px-2 py-0.5 rounded">
+                            <span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span> Reserved
+                        </span>
+                        <span class="flex items-center gap-1 text-rose-500 bg-rose-500/10 border border-rose-500/20 px-2 py-0.5 rounded">
+                            <span class="w-1.5 h-1.5 rounded-full bg-rose-500"></span> Sold Out
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Architectural Ground Floor / Second Floor Selector Panel -->
+                <div class="flex border-b border-zinc-800 mb-6 gap-4 relative z-10 text-xs">
+                    <button onclick="switchFloor(1)" id="floor-tab-1" class="pb-3 border-b-2 border-emerald-500 font-bold text-emerald-400 apple-transition whitespace-nowrap">LANTAI 1: Co-Living & Gym</button>
+                    <button onclick="switchFloor(2)" id="floor-tab-2" class="pb-3 border-b-2 border-transparent text-apple-darkGray hover:text-white font-medium apple-transition whitespace-nowrap">LANTAI 2: SkyPool & Cowork</button>
+                </div>
+
+                <!-- Responsive Interactive Blueprint SVG Container -->
+                <div class="relative w-full aspect-[16/10] overflow-hidden rounded-2xl bg-zinc-950/80 p-4 border border-zinc-900/60 flex items-center justify-center">
+                    
+                    <svg id="blueprint-svg-map" class="w-full h-full apple-transition" viewBox="0 0 800 450" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        
+                        <!-- Compass Direction Rose -->
+                        <g id="blueprint-compass" class="opacity-60">
+                            <circle cx="720" cy="90" r="22" stroke="#3f3f46" stroke-width="1.2"/>
+                            <polygon points="720,60 724,75 716,75" fill="#10b981"/>
+                            <polygon points="720,120 724,105 716,105" fill="#3f3f46"/>
+                            <text x="717" y="52" fill="#86868b" font-family="Inter" font-size="10" font-weight="bold">U</text>
+                        </g>
+
+                        <!-- Floor Level 1 Vector Plots -->
+                        <g id="floor-lvl-1-group" class="tab-content-fade">
+                            <!-- Main Entry Corridor Way -->
+                            <rect x="50" y="210" width="700" height="30" fill="#202225" opacity="0.5"/>
+                            <text x="350" y="228" fill="#52525b" font-family="Inter" font-size="9" font-weight="extrabold" letter-spacing="2">LOBBY ENTRY WAY & UTILITY CORRIDOR</text>
+
+                            <!-- Suite 101 - Tersedia -->
+                            <rect x="100" y="70" width="100" height="110" rx="4" class="site-unit" fill="#10b981" fill-opacity="0.15" stroke="#10b981" stroke-width="2"
+                                  onmouseover="showBlueprintTooltip(event, 'Suite #101', 'Tersedia Unit', 'Rp 1,15 Milyar', '6 Kamar Premium, Kamar Mandi Dalam')"
+                                  onmouseout="hideBlueprintTooltip()"
+                                  onclick="selectBlueprintUnit('101', 'Tersedia', 'Rp 1,15 Milyar', '6 Kamar Premium, 100% Autopilot Managed, Sektor Timur')"/>
+                            <text x="130" y="130" fill="#ffffff" font-family="Inter" font-size="12" font-weight="extrabold">#101</text>
+
+                            <!-- Suite 102 - Sold Out -->
+                            <rect x="220" y="70" width="100" height="110" rx="4" class="site-unit" fill="#f43f5e" fill-opacity="0.15" stroke="#f43f5e" stroke-width="2"
+                                  onmouseover="showBlueprintTooltip(event, 'Suite #102', 'Sold Out', 'Rp 1,15 Milyar', 'Sudah Diakuisisi Investor Surabaya')"
+                                  onmouseout="hideBlueprintTooltip()"
+                                  onclick="selectBlueprintUnit('102', 'Sold Out', 'Rp 1,15 Milyar', 'Sudah Terjual - Sektor Timur')"/>
+                            <text x="250" y="130" fill="#a1a1aa" font-family="Inter" font-size="12" font-weight="extrabold">#102</text>
+
+                            <!-- Suite 103 - Tersedia -->
+                            <rect x="340" y="70" width="100" height="110" rx="4" class="site-unit" fill="#10b981" fill-opacity="0.15" stroke="#10b981" stroke-width="2"
+                                  onmouseover="showBlueprintTooltip(event, 'Suite #103', 'Tersedia Unit', 'Rp 1,15 Milyar', 'Lokasi Terbaik Dekat Area ClubHouse')"
+                                  onmouseout="hideBlueprintTooltip()"
+                                  onclick="selectBlueprintUnit('103', 'Tersedia', 'Rp 1,15 Milyar', '6 Kamar Premium, Sektor Tengah Barat')"/>
+                            <text x="370" y="130" fill="#ffffff" font-family="Inter" font-size="12" font-weight="extrabold">#103</text>
+
+                            <!-- Suite 104 - Reserved -->
+                            <rect x="460" y="70" width="100" height="110" rx="4" class="site-unit" fill="#f59e0b" fill-opacity="0.15" stroke="#f59e0b" stroke-width="2"
+                                  onmouseover="showBlueprintTooltip(event, 'Suite #104', 'Reserved Unit', 'Rp 1,15 Milyar', 'Dalam Antrean Verifikasi Booking')"
+                                  onmouseout="hideBlueprintTooltip()"
+                                  onclick="selectBlueprintUnit('104', 'Reserved', 'Rp 1,15 Milyar', 'Tengah Menunggu Verifikasi Berkas')"/>
+                            <text x="490" y="130" fill="#ffffff" font-family="Inter" font-size="12" font-weight="extrabold">#104</text>
+
+                            <!-- Interactive Gym & Fitness Center Polygon -->
+                            <polygon points="580,70 740,70 740,180 580,180" fill="#2d2d30" stroke="#52525b" stroke-width="1.5" class="site-unit"
+                                     onmouseover="showBlueprintTooltip(event, 'Technogym Center', 'Fasilitas Umum', 'Lt 1 Sektor Utara', 'Alat Gym Profesional Standar Dunia')"
+                                     onmouseout="hideBlueprintTooltip()"/>
+                            <text x="610" y="130" fill="#a1a1aa" font-family="Inter" font-size="11" font-weight="black">GYM AREA</text>
+                            
+                            <!-- Co-Living Shared Dining -->
+                            <rect x="100" y="270" width="340" height="130" rx="4" fill="#2d2d30" stroke="#52525b" stroke-width="1.5" class="site-unit"
+                                  onmouseover="showBlueprintTooltip(event, 'Modern Dining Room', 'Social Area', 'Kapasitas 16 Orang', 'Dapur Bersih Premium dengan Smart Refrigerator')"
+                                  onmouseout="hideBlueprintTooltip()"/>
+                            <text x="180" y="340" fill="#a1a1aa" font-family="Inter" font-size="12" font-weight="black">SHARED KITCHEN & DINING</text>
+
+                            <!-- Mini Cinema Lobby -->
+                            <rect x="460" y="270" width="280" height="130" rx="4" fill="#2d2d30" stroke="#52525b" stroke-width="1.5" class="site-unit"
+                                  onmouseover="showBlueprintTooltip(event, 'Arcadia Cinema Room', 'Social Area', 'Dolby Atmos Speaker', 'Mini Theater Eksklusif 12 Kursi Malas')"
+                                  onmouseout="hideBlueprintTooltip()"/>
+                            <text x="540" y="340" fill="#a1a1aa" font-family="Inter" font-size="12" font-weight="black">MINI CINEMA</text>
+                        </g>
+
+                        <!-- Floor Level 2 Vector Plots (Hidden initially) -->
+                        <g id="floor-lvl-2-group" class="tab-content-fade opacity-0 pointer-events-none">
+                            <!-- Corridor -->
+                            <rect x="50" y="210" width="700" height="30" fill="#202225" opacity="0.5"/>
+                            <text x="330" y="228" fill="#52525b" font-family="Inter" font-size="9" font-weight="extrabold" letter-spacing="2">LOBBY ENTRY WAY & SUN DECK CORRIDOR</text>
+
+                            <!-- Suite 201 - Tersedia -->
+                            <rect x="100" y="70" width="100" height="110" rx="4" class="site-unit" fill="#10b981" fill-opacity="0.15" stroke="#10b981" stroke-width="2"
+                                  onmouseover="showBlueprintTooltip(event, 'Suite #201', 'Tersedia Unit', 'Rp 1,18 Milyar', 'Lantai Atas, Akses Langsung Coworking Space')"
+                                  onmouseout="hideBlueprintTooltip()"
+                                  onclick="selectBlueprintUnit('201', 'Tersedia', 'Rp 1,18 Milyar', '6 Kamar Premium Lantai Atas, Nilai Capital Gain Tinggi')"/>
+                            <text x="130" y="130" fill="#ffffff" font-family="Inter" font-size="12" font-weight="extrabold">#201</text>
+
+                            <!-- Suite 202 - Sold Out -->
+                            <rect x="220" y="70" width="100" height="110" rx="4" class="site-unit" fill="#f43f5e" fill-opacity="0.15" stroke="#f43f5e" stroke-width="2"
+                                  onmouseover="showBlueprintTooltip(event, 'Suite #202', 'Sold Out', 'Rp 1,18 Milyar', 'Sudah Diakuisisi Dokter Spesialis Bandung')"
+                                  onmouseout="hideBlueprintTooltip()"
+                                  onclick="selectBlueprintUnit('202', 'Sold Out', 'Rp 1,18 Milyar', 'Sudah Terjual - Lantai Atas')"/>
+                            <text x="250" y="130" fill="#a1a1aa" font-family="Inter" font-size="12" font-weight="extrabold">#202</text>
+
+                            <!-- Suite 203 - Tersedia -->
+                            <rect x="340" y="70" width="100" height="110" rx="4" class="site-unit" fill="#10b981" fill-opacity="0.15" stroke="#10b981" stroke-width="2"
+                                  onmouseover="showBlueprintTooltip(event, 'Suite #203', 'Tersedia Unit', 'Rp 1,18 Milyar', 'Pemandangan Hadap Sektor Gunung Slamet')"
+                                  onmouseout="hideBlueprintTooltip()"
+                                  onclick="selectBlueprintUnit('203', 'Tersedia', 'Rp 1,18 Milyar', 'Pilihan Strategis dengan Sirkulasi Terbaik')"/>
+                            <text x="370" y="130" fill="#ffffff" font-family="Inter" font-size="12" font-weight="extrabold">#203</text>
+
+                            <!-- Semi-Outdoor Infinity Swimming Pool -->
+                            <polygon points="460,70 740,70 740,180 460,180" fill="#1d3557" fill-opacity="0.3" stroke="#457b9d" stroke-width="1.5" class="site-unit"
+                                     onmouseover="showBlueprintTooltip(event, 'Infinity SkyPool', 'Wellness Area', 'Panjang 15 Meter', 'Kolam Renang Semi-Outdoor Oasis dengan Dek Kayu Jati')"
+                                     onmouseout="hideBlueprintTooltip()"/>
+                            <text x="540" y="130" fill="#e63946" font-family="Inter" font-size="11" font-weight="black">INFINITY POOL</text>
+
+                            <!-- Modern Coworking Space Area -->
+                            <rect x="100" y="270" width="460" height="130" rx="4" fill="#2d2d30" stroke="#52525b" stroke-width="1.5" class="site-unit"
+                                  onmouseover="showBlueprintTooltip(event, 'Modern Cowork Space', 'Social Area', 'Fiber Optic Wifi', 'Ruang Kerja Kolaboratif dengan Silent Study Booth')"
+                                  onmouseout="hideBlueprintTooltip()"/>
+                            <text x="260" y="340" fill="#a1a1aa" font-family="Inter" font-size="12" font-weight="black">COWORKING STUDIO</text>
+
+                            <!-- Sunrise Roof Terrace Lounge -->
+                            <rect x="580" y="270" width="160" height="130" rx="4" fill="#2d2d30" stroke="#52525b" stroke-width="1.5" class="site-unit"
+                                  onmouseover="showBlueprintTooltip(event, 'Sky Deck Lounge', 'Social Area', 'Pemandangan 360 Derajat', 'Dek Atas untuk Olahraga Yoga Pagi dan Bersantai Sore')"
+                                  onmouseout="hideBlueprintTooltip()"/>
+                            <text x="610" y="340" fill="#a1a1aa" font-family="Inter" font-size="11" font-weight="black">ROOF LOUNGE</text>
+                        </g>
+                    </svg>
+
+                    <!-- Interactive Floating Custom Tooltip -->
+                    <div id="blueprint-tooltip" class="absolute bg-white text-black p-4 rounded-2xl shadow-2xl border border-zinc-200 pointer-events-none opacity-0 apple-transition z-30 flex items-center gap-3 whitespace-nowrap">
+                        <div class="w-9 h-9 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+                        </div>
+                        <div>
+                            <span id="bt-unit-title" class="font-display font-black text-xs text-zinc-900 block">UNIT #101</span>
+                            <span id="bt-unit-status" class="text-[10px] text-zinc-500 font-bold block">Tersedia Unit</span>
+                            <span id="bt-unit-price" class="text-[10px] text-emerald-600 font-extrabold block">Rp 1,15 Milyar</span>
+                            <span id="bt-unit-desc" class="text-[9px] text-zinc-400 block mt-1">Sirkulasi Sempurna</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Unit Detail Sidebar Pane (Right Column) -->
+            <div class="lg:col-span-5 space-y-6">
+                <span class="text-xs font-bold uppercase tracking-widest text-emerald-400 font-display block">Informasi Sektoral Unit</span>
+                <h2 class="font-display font-extrabold text-2xl sm:text-3xl text-white leading-tight">Denah Visual Interaktif</h2>
+                
+                <div class="bg-zinc-900 border border-zinc-800 rounded-3xl p-6" id="unit-info-panel-parent">
+                    <!-- Default State -->
+                    <div id="unit-info-empty" class="text-center py-10 text-apple-darkGray space-y-4 font-light">
+                        <svg class="w-12 h-12 mx-auto text-zinc-700 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122"></path></svg>
+                        <p class="text-xs">Pilihlah salah satu nomor unit Suite di dalam peta cetak denah sebelah kiri untuk menganalisis skema investasi terperinci.</p>
+                    </div>
+
+                    <!-- Selected State Layout -->
+                    <div id="unit-info-selected" class="hidden space-y-4">
+                        <div class="flex justify-between items-center pb-3 border-b border-zinc-800">
+                            <span id="sel-unit-num" class="font-display font-extrabold text-2xl text-white">Suite #101</span>
+                            <span id="sel-unit-badge" class="px-2.5 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider whitespace-nowrap">Tersedia</span>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4 text-xs">
+                            <div>
+                                <span class="text-apple-darkGray block mb-0.5">Nilai Investasi Awal</span>
+                                <strong id="sel-unit-price" class="text-white text-sm whitespace-nowrap font-bold">Rp 1,15 Milyar</strong>
+                            </div>
+                            <div>
+                                <span class="text-apple-darkGray block mb-0.5">Target Yield Bersih</span>
+                                <strong class="text-emerald-400 text-sm whitespace-nowrap font-bold">± 10% - 12% / Th</strong>
+                            </div>
+                            <div>
+                                <span class="text-apple-darkGray block mb-0.5">Sewa Per Kamar</span>
+                                <strong class="text-white text-sm whitespace-nowrap font-bold">Rp 2 Juta / Bulan</strong>
+                            </div>
+                            <div>
+                                <span class="text-apple-darkGray block mb-0.5">Kapasitas Maksimal</span>
+                                <strong class="text-white text-sm whitespace-nowrap font-bold">6 Kamar Mewah</strong>
+                            </div>
+                        </div>
+                        <p id="sel-unit-desc" class="text-xs text-apple-darkGray font-light leading-relaxed border-t border-zinc-850 pt-3">
+                            Kamar premium dengan sirkulasi udara optimal. Memiliki potensi okupansi tinggi karena dekat dengan akses utama.
+                        </p>
+                        <button onclick="openBookingModal()" class="w-full bg-white text-black py-3 rounded-xl text-xs font-bold uppercase tracking-widest hover:bg-emerald-500 hover:text-black apple-transition mt-4 whitespace-nowrap">
+                            Reservasi Unit Ini Sekarang
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<!-- SECTION 5: REAL WEALTH ESTIMATOR (BLOOMBERG-STYLE INTERACTIVE CHART) -->
+<section id="kalkulator" class="py-32 bg-zinc-950 border-t border-zinc-900 relative">
+    <div class="max-w-7xl mx-auto px-6">
+        <div class="text-center max-w-3xl mx-auto mb-16">
+            <span class="text-xs font-bold uppercase tracking-widest text-emerald-400 font-display mb-3 block">Simulator Akumulasi Aset</span>
+            <h2 class="font-display font-extrabold text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-white tracking-tight leading-normal">
+                Proyeksi Finansial Konservatif 10 Tahun
+            </h2>
+            <p class="text-base text-apple-darkGray mt-4 font-light">
+                Gunakan penggeser waktu interaktif di bawah untuk menganalisis pertumbuhan hasil sewa pasif murni serta lonjakan nilai aset fisik properti Anda dari hal. 56-57 PDF resmi.
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+            
+            <!-- Input & Timeline Controller Pane (Left column) -->
+            <div class="lg:col-span-4 bg-zinc-900 border border-zinc-800/80 rounded-3xl p-6 md:p-8 flex flex-col justify-between">
+                <div class="space-y-6">
+                    <h3 class="font-display font-extrabold text-lg sm:text-xl text-white leading-tight">Timeline Evaluasi</h3>
+                    
+                    <!-- Quick Shortcut Buttons -->
+                    <div class="grid grid-cols-4 gap-1.5">
+                        <button onclick="setYear(1)" id="btn-yr-1" class="py-2 rounded-xl text-xs font-bold border border-zinc-800 text-apple-darkGray hover:bg-zinc-800 hover:text-white apple-transition whitespace-nowrap">Th 1</button>
+                        <button onclick="setYear(3)" id="btn-yr-3" class="py-2 rounded-xl text-xs font-bold border border-zinc-800 text-apple-darkGray hover:bg-zinc-800 hover:text-white apple-transition whitespace-nowrap">Th 3</button>
+                        <button onclick="setYear(5)" id="btn-yr-5" class="py-2 rounded-xl text-xs font-bold border border-zinc-800 text-apple-darkGray hover:bg-zinc-800 hover:text-white apple-transition whitespace-nowrap">Th 5</button>
+                        <button onclick="setYear(10)" id="btn-yr-10" class="py-2 rounded-xl text-xs font-bold border border-zinc-800 text-apple-darkGray hover:bg-zinc-800 hover:text-white apple-transition whitespace-nowrap">Th 10</button>
+                    </div>
+
+                    <!-- Range Slider continuous control -->
+                    <div class="space-y-3">
+                        <div class="flex justify-between text-xs font-semibold">
+                            <span class="text-apple-darkGray uppercase">Pilih Tahun</span>
+                            <span id="slider-year-val" class="text-emerald-400 font-bold font-display text-base whitespace-nowrap">Tahun 5</span>
+                        </div>
+                        <input type="range" id="fin-year-slider" min="1" max="10" value="5" oninput="handleSliderChange(this.value)" class="w-full h-1 bg-zinc-800 rounded-lg appearance-none cursor-pointer accent-emerald-500">
+                        <div class="flex justify-between text-[9px] text-apple-darkGray font-semibold tracking-wider uppercase font-mono whitespace-nowrap">
+                            <span>Th 1</span>
+                            <span>Th 5</span>
+                            <span>Th 10</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Footnote specifications based on conservative PDF standard data model -->
+                <div class="bg-black/60 border border-zinc-850 p-5 rounded-2xl text-[11px] text-apple-darkGray space-y-1.5 font-light mt-8">
+                    <span class="font-bold text-white block uppercase tracking-wider mb-1 whitespace-nowrap">Standard Asumsi Dasar (Hal. 56-57)</span>
+                    <div>• Nilai Unit Properti Awal: <strong class="text-white whitespace-nowrap font-medium">Rp 1,15 Milyar</strong> (6 Kamar Premium)</div>
+                    <div>• Tarif Awal Sewa: <strong class="text-white whitespace-nowrap font-medium">Rp 2 Juta / Kamar / Bulan</strong> (Naik ±5% / Th)</div>
+                    <div>• Biaya Operasional & Pemasaran Terpadu: <strong class="text-white whitespace-nowrap font-medium">30%</strong></div>
+                </div>
+            </div>
+
+            <!-- Dynamic Graphical Area-Chart & Projections Dashboard (Right column) -->
+            <div class="lg:col-span-8 bg-zinc-900 border border-zinc-800 rounded-3xl p-6 md:p-8 flex flex-col justify-between neon-glow-blue">
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch mb-8">
+                    <!-- Area-Chart Plotter Frame -->
+                    <div class="bg-zinc-950 rounded-2xl border border-zinc-900 p-4 flex flex-col justify-between">
+                        <div class="flex justify-between items-center text-[10px] font-mono mb-2 uppercase tracking-wider text-apple-darkGray whitespace-nowrap">
+                            <span>Sewa Bersih Kumulatif</span>
+                            <span class="text-emerald-400 font-bold">Kenaikan Progresif</span>
+                        </div>
+                        
+                        <!-- High Precision Dynamic Interactive SVG Area Chart Plotter -->
+                        <div class="relative w-full aspect-[2/1] my-2">
+                            <svg width="100%" height="100%" viewBox="0 0 320 160" class="overflow-visible" id="chart-svg-view">
+                                <defs>
+                                    <linearGradient id="chart-glow-gradient" x1="0" y1="0" x2="0" y2="1">
+                                        <stop offset="0%" stop-color="#10b981" stop-opacity="0.3"/>
+                                        <stop offset="100%" stop-color="#10b981" stop-opacity="0"/>
+                                    </linearGradient>
+                                </defs>
+                                <!-- Grid Lines -->
+                                <line x1="10" y1="20" x2="310" y2="20" stroke="#1d1e22" stroke-width="1"/>
+                                <line x1="10" y1="70" x2="310" y2="70" stroke="#1d1e22" stroke-width="1"/>
+                                <line x1="10" y1="120" x2="310" y2="120" stroke="#1d1e22" stroke-width="1"/>
+                                
+                                <!-- Mathematical Graph Curve Area (Injected via JS) -->
+                                <path id="chart-area-fill" d="M10,140" fill="url(#chart-glow-gradient)"/>
+                                <path id="chart-curve-line" d="M10,140" fill="none" stroke="#10b981" stroke-width="2.5" stroke-linecap="round"/>
+                                
+                                <!-- Graphical Tracker Coordinates Hover Node -->
+                                <circle id="chart-tracker-node" cx="10" cy="140" r="5" fill="#ffffff" stroke="#10b981" stroke-width="2" class="apple-transition"/>
+                            </svg>
+                        </div>
+                        <div class="flex justify-between text-[8px] font-mono tracking-widest text-zinc-600 uppercase border-t border-zinc-900 pt-2 whitespace-nowrap">
+                            <span>Tahun 1</span>
+                            <span>Tahun 5</span>
+                            <span>Tahun 10</span>
+                        </div>
+                    </div>
+
+                    <!-- Projected Net Dividends & Yield Metrics Grid -->
+                    <div class="space-y-4 flex flex-col justify-between">
+                        <div class="bg-zinc-950 p-4 rounded-xl border border-zinc-900">
+                            <span id="roi-title-lbl" class="text-[10px] text-apple-darkGray block uppercase tracking-wider mb-1 whitespace-nowrap font-semibold">Proyeksi Yield Investasi (ROI)</span>
+                            <div class="flex flex-wrap items-baseline gap-x-2 gap-y-1">
+                                <span id="roi-metric-val" class="font-display font-black text-xl sm:text-2xl lg:text-3xl text-white tracking-tight whitespace-nowrap font-bold">± 10.1%</span>
+                                <span class="text-[10px] sm:text-xs text-emerald-400 font-semibold uppercase whitespace-nowrap font-bold">Per Tahun</span>
+                            </div>
+                        </div>
+
+                        <div class="bg-zinc-950 p-4 rounded-xl border border-zinc-900">
+                            <span class="text-[10px] text-apple-darkGray block uppercase tracking-wider mb-1 whitespace-nowrap font-semibold">Sewa Bersih (Passive Income) / Tahun</span>
+                            <div class="flex flex-wrap items-baseline gap-x-1 gap-y-1">
+                                <span class="text-xs text-emerald-400 font-bold whitespace-nowrap font-bold">± Rp</span>
+                                <span id="annual-rent-val" class="font-display font-black text-xl sm:text-2xl lg:text-3xl text-white tracking-tight whitespace-nowrap font-bold">116 Juta</span>
+                            </div>
+                        </div>
+
+                        <div class="bg-zinc-950 p-3 rounded-xl border border-zinc-900 text-[10px] text-apple-darkGray flex items-center gap-2">
+                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 live-dot"></span>
+                            <span class="leading-tight">Hingga <strong class="text-white">4.5x Lipat</strong> Lebih Tinggi dari Rata-rata Deposito Bank Nasional.</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Glassmorphic Wealth Summary Cards Row -->
+                <div class="bg-zinc-950/80 border border-zinc-900 p-6 rounded-2xl grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="bg-zinc-900/40 p-4 rounded-xl border border-zinc-850 flex flex-col justify-between">
+                        <span class="text-[10px] text-apple-darkGray block uppercase whitespace-nowrap">Sewa Kumulatif</span>
+                        <strong id="cum-rent-val" class="font-display font-bold text-base sm:text-lg text-white block mt-1 whitespace-nowrap">Rp 391 Juta</strong>
+                        <span class="text-[9px] text-emerald-400/80 mt-2 block whitespace-nowrap">Total Dividen Tunai</span>
+                    </div>
+                    <div class="bg-zinc-900/40 p-4 rounded-xl border border-zinc-850 flex flex-col justify-between">
+                        <span class="text-[10px] text-apple-darkGray block uppercase whitespace-nowrap">Nilai Aset Fisik</span>
+                        <strong id="asset-phys-val" class="font-display font-bold text-base sm:text-lg text-white block mt-1 whitespace-nowrap">Rp 1,35 Milyar</strong>
+                        <span class="text-[9px] text-blue-400 mt-2 block whitespace-nowrap">Kenaikan Properti ±5%/Th</span>
+                    </div>
+                    <div class="bg-emerald-500/5 p-4 rounded-xl border border-emerald-500/20 flex flex-col justify-between">
+                        <span class="text-[10px] text-emerald-400 block uppercase whitespace-nowrap">Total Wealth Value</span>
+                        <strong id="total-wealth-val" class="font-display font-bold text-base sm:text-lg text-emerald-400 block mt-1 whitespace-nowrap">Rp 1,74 Milyar</strong>
+                        <span class="text-[9px] text-emerald-400/80 mt-2 block whitespace-nowrap">Dividen + Nilai Fisik Aset</span>
+                    </div>
+                </div>
+
+                <!-- Action Button -->
+                <div class="pt-6 mt-6 border-t border-zinc-800 flex flex-col sm:flex-row justify-between items-center gap-4">
+                    <div class="text-xs text-apple-darkGray font-medium">Laporan terverifikasi oleh analis properti Atlas.</div>
+                    <button onclick="openBookingModal()" class="w-full sm:w-auto px-6 py-3 bg-emerald-500 text-black font-extrabold text-xs uppercase tracking-widest rounded-xl hover:bg-emerald-400 apple-transition whitespace-nowrap">
+                        Kirim Financial Sheet via WhatsApp
+                    </button>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<!-- SECTION 6: INTEGRATED SMART CONCIERGE (INTERACTIVE SYSTEM INTELLIGENCE ADVISOR) -->
+<section id="concierge" class="py-32 bg-black border-t border-zinc-900 relative">
+    <div class="max-w-7xl mx-auto px-6">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
+            
+            <!-- Chatbot Column (Left Column) -->
+            <div class="lg:col-span-7 bg-zinc-900 border border-zinc-800 rounded-3xl p-6 md:p-8 flex flex-col justify-between h-[480px] relative neon-glow-emerald">
+                
+                <!-- Chat Window Header -->
+                <div class="flex justify-between items-center border-b border-zinc-800 pb-3 mb-4">
+                    <div class="flex items-center gap-3">
+                        <div class="w-9 h-9 rounded-full bg-emerald-500/10 text-emerald-400 flex items-center justify-center">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path></svg>
+                        </div>
+                        <div>
+                            <span class="font-display font-bold text-sm text-white block">Atlas Kemitraan AI</span>
+                            <span class="text-[9px] font-mono text-emerald-400 block tracking-widest whitespace-nowrap">INTELLIGENCE AGENT</span>
+                        </div>
+                    </div>
+                    <span class="w-2 h-2 rounded-full bg-emerald-500 live-dot"></span>
+                </div>
+
+                <!-- Conversational Thread Board -->
+                <div id="advisor-chat-board" class="flex-1 overflow-y-auto no-scrollbar space-y-4 text-xs pr-2">
+                    <!-- Standard Welcome Greeting Message -->
+                    <div class="flex items-start gap-3">
+                        <div class="w-8 h-8 rounded-full bg-emerald-500/10 text-emerald-400 flex items-center justify-center flex-shrink-0 text-[10px] font-black">AI</div>
+                        <div class="bg-zinc-950 border border-zinc-850 p-3 rounded-2xl rounded-tl-none max-w-[85%] text-apple-darkGray font-light leading-relaxed">
+                            Selamat datang, Saya asisten virtual Atlas Arcadia. Anda dapat mengajukan pertanyaan terkait legalitas, tarif, pembiayaan, ataupun cara kerja skema operasional autopilot kami. Silakan klik salah satu topik di bawah atau ketik langsung pertanyaan Anda!
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Simulated Typing state tracker -->
+                <div id="ai-typing-status" class="hidden text-[10px] text-emerald-400 font-mono italic flex items-center gap-2 px-11 py-2 whitespace-nowrap">
+                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-bounce"></span>
+                    <span>Atlas AI sedang mengolah jawaban...</span>
+                </div>
+
+                <!-- Instant Question Shortcut Suggestions -->
+                <div class="flex flex-wrap gap-2 pt-4 border-t border-zinc-800 mt-4 text-[9px] font-bold uppercase tracking-wider font-mono whitespace-nowrap">
+                    <button onclick="askPresetQuery('legal')" class="px-2.5 py-1.5 rounded bg-zinc-950 border border-zinc-850 text-apple-darkGray hover:border-emerald-500/30 hover:text-emerald-400 apple-transition">Legalitas Properti</button>
+                    <button onclick="askPresetQuery('capital')" class="px-2.5 py-1.5 rounded bg-zinc-950 border border-zinc-850 text-apple-darkGray hover:border-emerald-500/30 hover:text-emerald-400 apple-transition">Modal & Tarif</button>
+                    <button onclick="askPresetQuery('autopilot')" class="px-2.5 py-1.5 rounded bg-zinc-950 border border-zinc-850 text-apple-darkGray hover:border-emerald-500/30 hover:text-emerald-400 apple-transition">Cara Kerja Autopilot</button>
+                </div>
+            </div>
+
+            <!-- Descriptive Copy Column (Right Column) -->
+            <div class="lg:col-span-5 space-y-6">
+                <span class="text-xs font-bold uppercase tracking-widest text-emerald-400 font-display block">Panduan Kemitraan</span>
+                <h2 class="font-display font-extrabold text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-white tracking-tight leading-normal">
+                    Konsultasi Investasi Lebih Cerdas
+                </h2>
+                <p class="text-base text-apple-darkGray font-light leading-relaxed">
+                    Kami menghargai waktu berharga Anda. Sistem Asisten Kemitraan AI kami siap menjawab segala keraguan finansial dan operasional secara seketika, memberi penjelasan komprehensif 24/7.
+                </p>
+                <div class="space-y-4">
+                    <div class="flex items-center gap-3">
+                        <span class="w-2 h-2 rounded-full bg-emerald-500 live-dot"></span>
+                        <span class="text-xs font-semibold text-white leading-tight">Transparansi Data Keuangan Sektoral</span>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <span class="w-2 h-2 rounded-full bg-emerald-500 live-dot"></span>
+                        <span class="text-xs font-semibold text-white leading-tight">Dasar Hukum dan Struktur Perjanjian Jelas</span>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <span class="w-2 h-2 rounded-full bg-emerald-500 live-dot"></span>
+                        <span class="text-xs font-semibold text-white leading-tight">Mekanisme Bagi Hasil Tanpa Beban Operasional</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="bg-black text-[#86868b] py-16 border-t border-zinc-900">
+    <div class="max-w-7xl mx-auto px-6">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
+            <div class="space-y-4">
+                <span class="font-display font-black text-2xl tracking-tight text-white">ATLAS ARCADIA</span>
+                <p class="text-xs text-apple-darkGray leading-relaxed font-light">
+                    Luxury Wellness Co-Living otonom pertama di Indonesia. Membina keseimbangan kenyamanan hunian sekaligus ketenangan passive income bagi investor.
+                </p>
+            </div>
+            <div>
+                <span class="text-xs font-semibold text-white uppercase tracking-wider block mb-4">Investasi</span>
+                <ul class="text-xs space-y-2.5">
+                    <li><a href="#potensi" class="hover:text-white apple-transition">Potensi Regional</a></li>
+                    <li><a href="#kalkulator" class="hover:text-white apple-transition">Kalkulator Akumulasi</a></li>
+                    <li><a href="#floor-plan" class="hover:text-white apple-transition">Peta Denah Sektoral</a></li>
+                </ul>
+            </div>
+            <div>
+                <span class="text-xs font-semibold text-white uppercase tracking-wider block mb-4">Pilar Wellness</span>
+                <ul class="text-xs space-y-2.5">
+                    <li><a href="#pilar" class="hover:text-white apple-transition">5 Pilar Utama</a></li>
+                    <li><a href="#smart-suite" class="hover:text-white apple-transition">IoT Simulator 2.0</a></li>
+                    <li><a href="#concierge" class="hover:text-white apple-transition">AI Concierge</a></li>
+                </ul>
+            </div>
+            <div>
+                <span class="text-xs font-semibold text-white uppercase tracking-wider block mb-4">Kontak Resmi</span>
+                <p class="text-xs text-apple-darkGray leading-relaxed font-light">
+                    Jl. Senopati No. 22, Dukuhwaluh, Kec. Kembaran, Kab. Banyumas, Jawa Tengah.<br>
+                    Hotline: 0281 5103619 | 0851 6993 4058
+                </p>
+            </div>
+        </div>
+
+        <div class="pt-8 border-t border-zinc-900 flex flex-col sm:flex-row justify-between items-center gap-4 text-xs">
+            <span>© 2026 Atlas Property Co. Seluruh hak cipta dilindungi undang-undang.</span>
+            <div class="flex gap-6">
+                <a href="#" class="hover:text-white apple-transition">Syarat & Ketentuan</a>
+                <a href="#" class="hover:text-white apple-transition">Kebijakan Privasi</a>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- INTERACTIVE GLASSMORPHISM BOOKING MODAL -->
+<div id="bookingModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md opacity-0 pointer-events-none apple-transition">
+    <div class="bg-zinc-900 rounded-3xl w-full max-w-lg overflow-hidden border border-zinc-800 shadow-2xl relative p-8 transform scale-95 apple-transition" id="modal-container">
+        
+        <!-- Close Button -->
+        <button onclick="closeBookingModal()" class="absolute top-6 right-6 text-apple-darkGray hover:text-white apple-transition">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+        </button>
+
+        <!-- Success content wrapper -->
+        <div id="success-content" class="hidden text-center py-12 space-y-6">
+            <div class="w-16 h-16 bg-emerald-500/10 text-emerald-400 rounded-full flex items-center justify-center mx-auto shadow-sm">
+                <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path></svg>
+            </div>
+            <h3 class="font-display font-extrabold text-2xl text-white">Jadwal Sesi Presentasi Berhasil Dipesan!</h3>
+            <p class="text-sm text-apple-darkGray max-w-xs mx-auto leading-relaxed">
+                Terima kasih, Pak Rais. Tim analis properti senior Atlas akan menghubungi Anda dalam waktu kurang dari 1 jam untuk konfirmasi jadwal presentasi privat.
+            </p>
+            <button onclick="closeBookingModal()" class="px-6 py-2.5 bg-white text-black text-xs font-bold rounded-full apple-transition">Selesai</button>
+        </div>
+
+        <!-- Form content wrapper -->
+        <div id="form-content">
+            <div class="mb-6">
+                <span class="text-xs font-bold uppercase tracking-wider text-emerald-400">Pemesanan Jadwal Konsultasi</span>
+                <h3 class="font-display font-extrabold text-2xl text-white mt-1">Book Private Presentation</h3>
+                <p class="text-xs text-apple-darkGray mt-1 leading-relaxed">
+                    Dapatkan kiriman eksklusif financial sheet modeling dan paket analisis pasar properti Purwokerto.
+                </p>
+            </div>
+
+            <form onsubmit="handleFormSubmit(event)" class="space-y-4">
+                <div>
+                    <label class="block text-[10px] font-bold uppercase tracking-wider text-apple-darkGray mb-1.5">Nama Lengkap</label>
+                    <input type="text" id="form-name" required class="w-full bg-black border border-zinc-800 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-emerald-400 text-white apple-transition" placeholder="Contoh: Irdat Ikhwan Rais">
+                </div>
+                <div>
+                    <label class="block text-[10px] font-bold uppercase tracking-wider text-apple-darkGray mb-1.5">Nomor WhatsApp Aktif</label>
+                    <input type="tel" required class="w-full bg-black border border-zinc-800 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-emerald-400 text-white apple-transition" placeholder="Contoh: 08123456789">
+                </div>
+                <div>
+                    <label class="block text-[10px] font-bold uppercase tracking-wider text-apple-darkGray mb-1.5">Model Pertemuan Preferensi</label>
+                    <select class="w-full bg-black border border-zinc-800 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-emerald-400 text-apple-darkGray apple-transition">
+                        <option>Tatap Muka Langsung (Purwokerto Timur)</option>
+                        <option>Panggilan Video Online (Zoom / GMeet)</option>
+                        <option>Kirim Proposal Lengkap via WhatsApp Terlebih Dahulu</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="btn-shimmer w-full bg-white text-black py-3.5 rounded-xl text-xs font-bold uppercase tracking-wider hover:bg-emerald-500 apple-transition mt-2 shadow-lg whitespace-nowrap">
+                    Konfirmasi Jadwal Sesi Privat
+                </button>
+            </form>
+        </div>
+
+    </div>
+</div>
+
+<!-- ==========================================================================
+     CORE INTERACTIVE SYSTEM JAVASCRIPT
+     ========================================================================== -->
+<script>
+    // ==========================================================================
+    // 1. SCROLL PROGRESS BAR & NAV BAR COMPRESSION
+    // ==========================================================================
+    window.addEventListener('scroll', function() {
+        const nav = document.getElementById('main-nav');
+        const scrollProgress = document.getElementById('scroll-progress');
+        const scrollTop = window.scrollY;
+        const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+        
+        const progressPercent = (scrollTop / docHeight) * 100;
+        if (scrollProgress) {
+            scrollProgress.style.width = progressPercent + '%';
+        }
+
+        if (scrollTop > 50) {
+            nav.classList.remove('py-4');
+            nav.classList.add('py-2.5');
+        } else {
+            nav.classList.remove('py-2.5');
+            nav.classList.add('py-4');
+        }
+    });
+
+    // ==========================================================================
+    // 2. GLOBAL BACKGROUND HIGH-PERFORMANCE CANVAS PARTICLES
+    // ==========================================================================
+    const canvas = document.getElementById('particleCanvas');
+    const ctx = canvas.getContext('2d');
+    let particles = [];
+    let mouse = { x: null, y: null };
+
+    function resizeCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    class Particle {
+        constructor() {
+            this.x = Math.random() * canvas.width;
+            this.y = Math.random() * canvas.height;
+            this.size = Math.random() * 1.5 + 0.5;
+            this.speedX = Math.random() * 0.2 - 0.1;
+            this.speedY = Math.random() * 0.2 - 0.1;
+        }
+        update() {
+            this.x += this.speedX;
+            this.y += this.speedY;
+
+            if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
+            if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
+
+            if (mouse.x && mouse.y) {
+                let dx = mouse.x - this.x;
+                let dy = mouse.y - this.y;
+                let dist = Math.sqrt(dx*dx + dy*dy);
+                if (dist < 120) {
+                    this.x -= dx * 0.005;
+                    this.y -= dy * 0.005;
+                }
+            }
+        }
+        draw() {
+            ctx.fillStyle = document.body.classList.contains('light-mode') 
+                ? 'rgba(16, 185, 129, 0.15)' 
+                : 'rgba(16, 185, 129, 0.3)';
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+            ctx.fill();
+        }
+    }
+
+    function initParticles() {
+        particles = [];
+        const numParticles = Math.min(Math.floor(window.innerWidth / 12), 100);
+        for (let i = 0; i < numParticles; i++) {
+            particles.push(new Particle());
+        }
+    }
+    initParticles();
+
+    function animateParticles() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        for (let i = 0; i < particles.length; i++) {
+            particles[i].update();
+            particles[i].draw();
+        }
+        requestAnimationFrame(animateParticles);
+    }
+    animateParticles();
+
+    window.addEventListener('mousemove', (e) => {
+        mouse.x = e.clientX;
+        mouse.y = e.clientY;
+    });
+    window.addEventListener('mouseleave', () => {
+        mouse.x = null;
+        mouse.y = null;
+    });
+
+    // ==========================================================================
+    // 3. DARK / LIGHT MODE SCHEME TOGGLING
+    // ==========================================================================
+    function toggleTheme() {
+        const body = document.body;
+        const btn = document.getElementById('theme-toggle-btn');
+        const knob = document.getElementById('theme-toggle-knob');
+        const icon = document.getElementById('theme-icon');
+
+        body.classList.toggle('light-mode');
+
+        if (body.classList.contains('light-mode')) {
+            knob.style.transform = 'translateX(22px)';
+            btn.style.backgroundColor = '#10b981';
+            btn.style.borderColor = '#059669';
+            icon.textContent = '☀️';
+            localStorage.setItem('themePreference', 'light');
+        } else {
+            knob.style.transform = 'translateX(0)';
+            btn.style.backgroundColor = '';
+            btn.style.borderColor = '';
+            icon.textContent = '🌙';
+            localStorage.setItem('themePreference', 'dark');
+        }
+        
+        // Redraw ROI line charts based on active slider position
+        const currentSelectedYear = document.getElementById('fin-year-slider').value;
+        renderBloombergChart(parseInt(currentSelectedYear));
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+        const savedTheme = localStorage.getItem('themePreference');
+        if (savedTheme === 'light') {
+            toggleTheme();
+        }
+    });
+
+    // ==========================================================================
+    // 4. SMART SUITE IOT SIMULATOR LOGIC
+    // ==========================================================================
+    let isSmartLockActive = true;
+    let isHEPAActive = true;
+    let currentAmbientMode = 'study';
+    let currentTempCelsius = 24;
+
+    const iotLogs = [
+        "Diagnostics: Node central verification... OK.",
+        "System: Air quality indexing... 99% Pure HEPA.",
+        "System: Optic network sync... High-fidelity signal.",
+        "SmartLock: Signature verified. Encrypted door active."
+    ];
+
+    function appendTerminalLog(message) {
+        const terminal = document.getElementById('iot-terminal');
+        if (!terminal) return;
+        const time = new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+        
+        const line = document.createElement('div');
+        line.className = 'flex items-center gap-2 transform translate-y-1 opacity-0 apple-transition';
+        line.innerHTML = `<span class="w-1 h-1 rounded-full bg-emerald-500"></span><span class="text-zinc-650">[${time}]</span> <span class="text-zinc-300">${message}</span>`;
+        
+        terminal.appendChild(line);
+        if (terminal.children.length > 5) {
+            terminal.children[0].remove();
+        }
+
+        setTimeout(() => {
+            line.classList.remove('translate-y-1', 'opacity-0');
+        }, 30);
+    }
+
+    // Auto append random logs every 6 seconds to keep page active
+    setInterval(() => {
+        const randomMsg = iotLogs[Math.floor(Math.random() * iotLogs.length)];
+        appendTerminalLog(randomMsg);
+    }, 6000);
+
+    function toggleSmartLock() {
+        isSmartLockActive = !isSmartLockActive;
+        const icon = document.getElementById('lock-icon');
+        const status = document.getElementById('lock-status');
+        const toggleBtn = document.getElementById('lock-toggle');
+
+        if (isSmartLockActive) {
+            status.textContent = "Locked Terenkripsi";
+            status.className = "text-emerald-400";
+            toggleBtn.className = "w-11 h-6 rounded-full bg-emerald-500 p-0.5 flex items-center justify-end apple-transition";
+            icon.className = "w-10 h-10 rounded-xl bg-zinc-900 text-emerald-400 flex items-center justify-center";
+            appendTerminalLog("SmartLock: System locked. High security active.");
+        } else {
+            status.textContent = "Akses Terbuka";
+            status.className = "text-amber-500";
+            toggleBtn.className = "w-11 h-6 rounded-full bg-zinc-850 p-0.5 flex items-center justify-start apple-transition";
+            icon.className = "w-10 h-10 rounded-xl bg-zinc-900 text-amber-500 flex items-center justify-center";
+            appendTerminalLog("SmartLock: Keyless swipe granted. Entry door opened.");
+        }
+    }
+
+    function toggleHEPAFilter() {
+        isHEPAActive = !isHEPAActive;
+        const icon = document.getElementById('filter-icon');
+        const status = document.getElementById('filter-status');
+        const toggleBtn = document.getElementById('filter-toggle');
+
+        if (isHEPAActive) {
+            status.textContent = "Penyaringan Aktif (99%)";
+            status.className = "text-emerald-400";
+            toggleBtn.className = "w-11 h-6 rounded-full bg-emerald-500 p-0.5 flex items-center justify-end apple-transition";
+            icon.className = "w-10 h-10 rounded-xl bg-zinc-900 text-emerald-400 flex items-center justify-center";
+            appendTerminalLog("AirFilter: HEPA filtration activated. Clean space.");
+        } else {
+            status.textContent = "Filtrasi Standby";
+            status.className = "text-zinc-500";
+            toggleBtn.className = "w-11 h-6 rounded-full bg-zinc-850 p-0.5 flex items-center justify-start apple-transition";
+            icon.className = "w-10 h-10 rounded-xl bg-zinc-900 text-zinc-600 flex items-center justify-center";
+            appendTerminalLog("AirFilter: Filtration set to sleep standby mode.");
+        }
+    }
+
+    function setAmbientMode(mode) {
+        currentAmbientMode = mode;
+        const studyBtn = document.getElementById('btn-mode-study');
+        const chillBtn = document.getElementById('btn-mode-chill');
+        const sleepBtn = document.getElementById('btn-mode-sleep');
+        const ambientLbl = document.getElementById('ambient-mode-lbl');
+        const glow = document.getElementById('room-glow');
+        const tempText = document.getElementById('ac-temp-val');
+        const statusDesc = document.getElementById('ac-status-desc');
+        const powerIndicator = document.getElementById('power-indicator');
+
+        // Reset active btn classes
+        [studyBtn, chillBtn, sleepBtn].forEach(btn => {
+            btn.className = "py-2 rounded-xl bg-zinc-900 text-[10px] font-bold text-zinc-400 border border-transparent";
+        });
+
+        if (mode === 'study') {
+            studyBtn.className = "py-2 rounded-xl bg-zinc-900 text-[10px] font-bold text-emerald-400 border border-emerald-500/30";
+            ambientLbl.textContent = "Study Mode";
+            glow.style.backgroundColor = "rgba(16, 185, 129, 0.05)";
+            currentTempCelsius = 24;
+            tempText.textContent = "24°C";
+            statusDesc.textContent = "Sangat Nyaman";
+            statusDesc.className = "text-[8px] text-emerald-400 font-bold uppercase tracking-wider mt-1";
+            powerIndicator.textContent = "2.8 kWh / hari";
+            updateACDialVisualizer(24, '#10b981');
+            appendTerminalLog("Ambient: Study lighting presets loaded. Daylights ON.");
+        } else if (mode === 'chill') {
+            chillBtn.className = "py-2 rounded-xl bg-zinc-900 text-[10px] font-bold text-amber-400 border border-amber-500/30";
+            ambientLbl.textContent = "Chill Mode";
+            glow.style.backgroundColor = "rgba(245, 158, 11, 0.05)";
+            currentTempCelsius = 22;
+            tempText.textContent = "22°C";
+            statusDesc.textContent = "Sejuk Rileks";
+            statusDesc.className = "text-[8px] text-amber-500 font-bold uppercase tracking-wider mt-1";
+            powerIndicator.textContent = "3.2 kWh / hari";
+            updateACDialVisualizer(22, '#f59e0b');
+            appendTerminalLog("Ambient: Warm chill lighting presets loaded. Cozy dimming ON.");
+        } else if (mode === 'sleep') {
+            sleepBtn.className = "py-2 rounded-xl bg-zinc-900 text-[10px] font-bold text-indigo-400 border border-indigo-500/30";
+            ambientLbl.textContent = "Sleep Mode";
+            glow.style.backgroundColor = "rgba(99, 102, 241, 0.05)";
+            currentTempCelsius = 20;
+            tempText.textContent = "20°C";
+            statusDesc.textContent = "Deep Sleep Active";
+            statusDesc.className = "text-[8px] text-indigo-400 font-bold uppercase tracking-wider mt-1";
+            powerIndicator.textContent = "1.8 kWh / hari";
+            updateACDialVisualizer(20, '#6366f1');
+            appendTerminalLog("Ambient: Sleep mode configuration loaded. Deep Sleep optimization.");
+        }
+    }
+
+    // Interactive AC Rotary Dial Wheel rotation handler
+    const acRotaryWheel = document.getElementById('ac-rotary-wheel');
+    let isDraggingDial = false;
+
+    if (acRotaryWheel) {
+        acRotaryWheel.addEventListener('mousedown', () => isDraggingDial = true);
+        window.addEventListener('mouseup', () => isDraggingDial = false);
+        window.addEventListener('mousemove', (e) => {
+            if (!isDraggingDial) return;
+            const dialRect = acRotaryWheel.parentNode.getBoundingClientRect();
+            const dialCenterX = dialRect.left + dialRect.width / 2;
+            const dialCenterY = dialRect.top + dialRect.height / 2;
+            
+            const dx = e.clientX - dialCenterX;
+            const dy = e.clientY - dialCenterY;
+            let angleRad = Math.atan2(dy, dx);
+            let angleDeg = angleRad * (180 / Math.PI) + 90;
+            if (angleDeg < 0) angleDeg += 360;
+
+            // Constrain angles to track shape
+            if (angleDeg >= 45 && angleDeg <= 315) {
+                acRotaryWheel.style.transform = `rotate(${angleDeg}deg)`;
+                
+                // Map rotation angle to temperature range (16 - 30 Celsius)
+                const pct = (angleDeg - 45) / (315 - 45);
+                const calcTemp = Math.round(16 + pct * 14);
+                if (calcTemp !== currentTempCelsius) {
+                    currentTempCelsius = calcTemp;
+                    document.getElementById('ac-temp-val').textContent = `${calcTemp}°C`;
+                    
+                    const desc = document.getElementById('ac-status-desc');
+                    if (calcTemp < 20) {
+                        desc.textContent = "Dingin Maksimal";
+                        desc.className = "text-[8px] text-blue-400 font-bold uppercase tracking-wider mt-1";
+                    } else if (calcTemp <= 25) {
+                        desc.textContent = "Suhu Nyaman Sehat";
+                        desc.className = "text-[8px] text-emerald-400 font-bold uppercase tracking-wider mt-1";
+                    } else {
+                        desc.textContent = "Hangat Alami";
+                        desc.className = "text-[8px] text-amber-500 font-bold uppercase tracking-wider mt-1";
+                    }
+
+                    // Dynamically map stroke dasharray length based on calculation temperature
+                    const fillStroke = (pct * 210) + 140;
+                    document.getElementById('dial-ring-indicator').style.strokeDasharray = `${fillStroke} 440`;
+                }
+            }
+        });
+    }
+
+    function updateACDialVisualizer(temp, colorCode) {
+        // Map standard preset temperatures to rotary rotation degrees
+        const pct = (temp - 16) / 14;
+        const angleDeg = (pct * (315 - 45)) + 45;
+        acRotaryWheel.style.transform = `rotate(${angleDeg}deg)`;
+        
+        const fillStroke = (pct * 210) + 140;
+        const indicator = document.getElementById('dial-ring-indicator');
+        indicator.style.strokeDasharray = `${fillStroke} 440`;
+        indicator.style.stroke = colorCode;
+    }
+
+    // ==========================================================================
+    // 5. ARCHITECTURAL BLUEPRINT INTERACTIVE STUDIO
+    // ==========================================================================
+    let currentFloorSelected = 1;
+
+    function switchFloor(lvl) {
+        currentFloorSelected = lvl;
+        const tab1 = document.getElementById('floor-tab-1');
+        const tab2 = document.getElementById('floor-tab-2');
+        const floorGroup1 = document.getElementById('floor-lvl-1-group');
+        const floorGroup2 = document.getElementById('floor-lvl-2-group');
+
+        if (lvl === 1) {
+            tab1.className = "pb-3 border-b-2 border-emerald-500 font-bold text-emerald-400 apple-transition";
+            tab2.className = "pb-3 border-b-2 border-transparent text-apple-darkGray hover:text-white font-medium apple-transition";
+            
+            floorGroup2.classList.add('opacity-0', 'pointer-events-none');
+            setTimeout(() => {
+                floorGroup1.classList.remove('opacity-0', 'pointer-events-none');
+            }, 300);
+        } else {
+            tab2.className = "pb-3 border-b-2 border-emerald-500 font-bold text-emerald-400 apple-transition";
+            tab1.className = "pb-3 border-b-2 border-transparent text-apple-darkGray hover:text-white font-medium apple-transition";
+            
+            floorGroup1.classList.add('opacity-0', 'pointer-events-none');
+            setTimeout(() => {
+                floorGroup2.classList.remove('opacity-0', 'pointer-events-none');
+            }, 300);
+        }
+    }
+
+    function showBlueprintTooltip(e, unitTitle, unitStatus, unitPrice, unitDesc) {
+        const tooltip = document.getElementById('blueprint-tooltip');
+        const container = e.currentTarget.ownerSVGElement.parentNode.getBoundingClientRect();
+        const rect = e.currentTarget.getBoundingClientRect();
+
+        document.getElementById('bt-unit-title').textContent = unitTitle;
+        document.getElementById('bt-unit-status').textContent = unitStatus;
+        document.getElementById('bt-unit-price').textContent = unitPrice;
+        document.getElementById('bt-unit-desc').textContent = unitDesc;
+
+        // Perfect position offset calculations
+        const x = rect.left - container.left + (rect.width / 2) - 80;
+        const y = rect.top - container.top - 110;
+
+        tooltip.style.left = `${x}px`;
+        tooltip.style.top = `${y}px`;
+        tooltip.style.opacity = '1';
+    }
+
+    function hideBlueprintTooltip() {
+        const tooltip = document.getElementById('blueprint-tooltip');
+        tooltip.style.opacity = '0';
+    }
+
+    function selectBlueprintUnit(unitNum, status, price, desc) {
+        const emptyState = document.getElementById('unit-info-empty');
+        const selectedState = document.getElementById('unit-info-selected');
+        
+        emptyState.classList.add('hidden');
+        selectedState.classList.remove('hidden');
+
+        document.getElementById('sel-unit-num').textContent = `Suite #${unitNum}`;
+        document.getElementById('sel-unit-price').textContent = price;
+        document.getElementById('sel-unit-desc').textContent = desc;
+
+        const badge = document.getElementById('sel-unit-badge');
+        badge.textContent = status;
+
+        if (status === 'Tersedia') {
+            badge.className = "px-2.5 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-emerald-500/10 text-emerald-400 border border-emerald-500/20";
+        } else if (status === 'Reserved') {
+            badge.className = "px-2.5 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-amber-500/10 text-amber-400 border border-amber-500/20";
+        } else {
+            badge.className = "px-2.5 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-rose-500/10 text-rose-400 border border-rose-500/20";
+        }
+    }
+
+    // ==========================================================================
+    // 6. BLOOMBERG-STYLE INTERACTIVE ROI AREA CHART & CALCULATOR ENGINE
+    // ==========================================================================
+    const mockROIHistory = {
+        1: { rent: 0, asset: 1.15, wealth: 1.15, roi: "Fase Konstruksi", text: "Fase Pembangunan" },
+        2: { rent: 70, asset: 1.18, wealth: 1.25, roi: "± 6.1%", text: "Proyeksi ROI Tahun Kedua" },
+        3: { rent: 165, asset: 1.22, wealth: 1.38, roi: "± 8.3%", text: "Proyeksi ROI Tahun Ketiga" },
+        4: { rent: 275, asset: 1.28, wealth: 1.55, roi: "± 9.6%", text: "Proyeksi ROI Tahun Keempat" },
+        5: { rent: 391, asset: 1.35, wealth: 1.74, roi: "± 10.1%", text: "Proyeksi ROI Tahun Kelima" },
+        6: { rent: 513, asset: 1.42, wealth: 1.93, roi: "± 10.6%", text: "Proyeksi ROI Tahun Keenam" },
+        7: { rent: 641, asset: 1.49, wealth: 2.13, roi: "± 11.1%", text: "Proyeksi ROI Tahun Ketujuh" },
+        8: { rent: 776, asset: 1.56, wealth: 2.33, roi: "± 11.7%", text: "Proyeksi ROI Tahun Kedelapan" },
+        9: { rent: 917, asset: 1.64, wealth: 2.55, roi: "± 12.3%", text: "Proyeksi ROI Tahun Kesembilan" },
+        10: { rent: 1070, asset: 1.72, wealth: 2.79, roi: "± 12.9%", text: "Proyeksi ROI Tahun Kesepuluh" }
+    };
+
+    // Calculate dynamic curve vectors inside the SVG area box
+    function renderBloombergChart(activeYear) {
+        const totalPoints = 10;
+        const width = 300;
+        const height = 120;
+        const startX = 10;
+        const startY = 140;
+
+        let points = [];
+        for (let i = 1; i <= totalPoints; i++) {
+            const x = startX + ((i - 1) / (totalPoints - 1)) * width;
+            // Map mathematical rent value to y coordinates (rent peak: 1.070 M = 1070)
+            const val = mockROIHistory[i].rent;
+            const y = startY - (val / 1070) * height;
+            points.push({ x, y });
+        }
+
+        // Curve path interpolation calculation
+        let lineD = `M ${points[0].x} ${points[0].y}`;
+        for (let i = 1; i < points.length; i++) {
+            const cpX1 = points[i-1].x + (points[i].x - points[i-1].x) / 2;
+            const cpY1 = points[i-1].y;
+            const cpX2 = points[i-1].x + (points[i].x - points[i-1].x) / 2;
+            const cpY2 = points[i].y;
+            lineD += ` C ${cpX1} ${cpY1}, ${cpX2} ${cpY2}, ${points[i].x} ${points[i].y}`;
+        }
+
+        // Draw filled glow area
+        let areaD = `${lineD} L ${points[points.length-1].x} ${startY} L ${points[0].x} ${startY} Z`;
+
+        document.getElementById('chart-curve-line').setAttribute('d', lineD);
+        document.getElementById('chart-area-fill').setAttribute('d', areaD);
+
+        // Positioning active node on specific year coordinates
+        const activeNodeCoord = points[activeYear - 1];
+        const tracker = document.getElementById('chart-tracker-node');
+        tracker.setAttribute('cx', activeNodeCoord.x);
+        tracker.setAttribute('cy', activeNodeCoord.y);
+    }
+
+    function setYear(val) {
+        document.getElementById('fin-year-slider').value = val;
+        handleSliderChange(val);
+    }
+
+    function handleSliderChange(val) {
+        val = parseInt(val);
+        document.getElementById('slider-year-val').textContent = `Tahun ${val}`;
+
+        // Reset quick button states
+        [1, 3, 5, 10].forEach(y => {
+            const btn = document.getElementById(`btn-yr-${y}`);
+            if (btn) btn.className = "py-2 rounded-xl text-xs font-bold border border-zinc-800 text-apple-darkGray hover:bg-zinc-800 hover:text-white apple-transition";
+        });
+        const selectedBtn = document.getElementById(`btn-yr-${val}`);
+        if (selectedBtn) {
+            selectedBtn.className = "py-2 rounded-xl text-xs font-bold bg-emerald-500 border border-emerald-500 text-black apple-transition";
+        }
+
+        // Pull corresponding model financial analytics values
+        const data = mockROIHistory[val];
+        
+        applyValueFadeTransition('roi-metric-val', data.roi);
+        applyValueFadeTransition('roi-title-lbl', data.text);
+        applyValueFadeTransition('annual-rent-val', val === 1 ? "Konstruksi" : `${Math.round(data.rent / val)} Juta`);
+        applyValueFadeTransition('cum-rent-val', val === 1 ? "Rp 0" : `Rp ${data.rent} Juta`);
+        applyValueFadeTransition('asset-phys-val', `Rp ${data.asset} Milyar`);
+        applyValueFadeTransition('total-wealth-val', `Rp ${data.wealth} Milyar`);
+
+        renderBloombergChart(val);
+    }
+
+    function applyValueFadeTransition(elementId, textString) {
+        const el = document.getElementById(elementId);
+        if (el) {
+            el.style.opacity = '0.4';
+            setTimeout(() => {
+                el.textContent = textString;
+                el.style.opacity = '1';
+            }, 80);
+        }
+    }
+
+    // ==========================================================================
+    // 7. ATLAS KEMITRAAN INTELLIGENCE AGENT (CHAT SYSTEM ENGINE)
+    // ==========================================================================
+    const knowledgeDatabase = {
+        legal: "Legalitas Atlas Arcadia terjamin aman melalui kepemilikan Sertifikat Hak Milik (SHM) murni, IMB, dan perizinan Pondok Wisata resmi. Seluruh kepemilikan unit diikat dalam Akta Jual Beli (AJB) notaril guna menjamin hak penuh Anda sebagai pemilik tanah dan bangunan sah.",
+        capital: "Pilihan unit dimulai dari Rp 1,15 Milyar (6 Kamar Premium Full Furnished standar hotel). Tarif sewa dipatok Rp 2 Juta - Rp 3.5 Juta per bulan per kamar, menghasilkan net rental yield optimal di atas 10% per tahun.",
+        autopilot: "Sistem Autopilot menyerahkan seluruh porsi pengelolaan kepada Atlas Estate Management. Kami menangani pemasaran, penyaringan akademisi/medis, penagihan digital otomatis, hingga pemeliharaan struktur bangunan. Anda hanya menerima dividen pasif bersih setiap bulannya."
+    };
+
+    function askPresetQuery(key) {
+        const board = document.getElementById('advisor-chat-board');
+        const typing = document.getElementById('ai-typing-status');
+        
+        // Render user visual chat bubble
+        let userQuestion = "";
+        if (key === 'legal') userQuestion = "Bagaimana aspek hukum & legalitas properti Atlas Arcadia?";
+        else if (key === 'capital') userQuestion = "Berapa modal awal investasi & perkiraan tarif sewa?";
+        else if (key === 'autopilot') userQuestion = "Bagaimana skema otonom otonom autopilot bekerja?";
+
+        const userBubble = document.createElement('div');
+        userBubble.className = "flex items-start gap-3 justify-end";
+        userBubble.innerHTML = `
+            <div class="bg-emerald-500/10 border border-emerald-500/20 p-3 rounded-2xl rounded-tr-none max-w-[85%] text-white text-right leading-relaxed font-light">
+                ${userQuestion}
+            </div>
+            <div class="w-8 h-8 rounded-full bg-zinc-800 text-zinc-400 flex items-center justify-center flex-shrink-0 text-[10px] font-black uppercase">Me</div>
+        `;
+        board.appendChild(userBubble);
+        board.scrollTop = board.scrollHeight;
+
+        // Show thinking animation state
+        typing.classList.remove('hidden');
+
+        setTimeout(() => {
+            typing.classList.add('hidden');
+            
+            // Render AI visual response bubble
+            const responseText = knowledgeDatabase[key];
+            const aiBubble = document.createElement('div');
+            aiBubble.className = "flex items-start gap-3";
+            aiBubble.innerHTML = `
+                <div class="w-8 h-8 rounded-full bg-emerald-500/10 text-emerald-400 flex items-center justify-center flex-shrink-0 text-[10px] font-black">AI</div>
+                <div class="bg-zinc-950 border border-zinc-850 p-3 rounded-2xl rounded-tl-none max-w-[85%] text-apple-darkGray font-light leading-relaxed">
+                    ${responseText}
+                </div>
+            `;
+            board.appendChild(aiBubble);
+            board.scrollTop = board.scrollHeight;
+        }, 1500);
+    }
+
+    // ==========================================================================
+    // 8. BOOKING DIALOG MANAGEMENT CONTROLS
+    // ==========================================================================
+    function openBookingModal() {
+        const modal = document.getElementById('bookingModal');
+        const container = document.getElementById('modal-container');
+        
+        document.getElementById('form-content').classList.remove('hidden');
+        document.getElementById('success-content').classList.add('hidden');
+
+        modal.classList.remove('opacity-0', 'pointer-events-none');
+        container.classList.remove('scale-95');
+        container.classList.add('scale-100');
+    }
+
+    function closeBookingModal() {
+        const modal = document.getElementById('bookingModal');
+        const container = document.getElementById('modal-container');
+        
+        modal.classList.add('opacity-0', 'pointer-events-none');
+        container.classList.add('scale-95');
+        container.classList.remove('scale-100');
+    }
+
+    function handleFormSubmit(event) {
+        event.preventDefault();
+        document.getElementById('form-content').classList.add('hidden');
+        document.getElementById('success-content').classList.remove('hidden');
+    }
+
+    // ==========================================================================
+    // 9. COLD SYSTEM INITIALIZATION
+    // ==========================================================================
+    window.addEventListener('load', () => {
+        setYear(5); // Start ROI projections model at Year 5 by default
+        setAmbientMode('study'); // Study lighting presets on load
+        appendTerminalLog("Diagnostics: Active IoT sensor grid initialized.");
+        appendTerminalLog("System: WebGL & UI frame rate locked... 60fps.");
+    });
+</script>
+</body>
+</html>
